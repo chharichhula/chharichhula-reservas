@@ -34,7 +34,7 @@ button,input{font:inherit;color:inherit}
 #door-bg{opacity:1}
 #door{box-shadow:0 0 80px rgba(0,0,0,.55)}
 .shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(8,26,18,.7) 0%,rgba(8,26,18,0) 34%,rgba(8,26,18,0) 60%,rgba(8,26,18,.72) 100%)}
-.shade2{position:absolute;inset:0;pointer-events:none;background:#0a2218;opacity:0}
+.shade2{position:absolute;inset:0;pointer-events:none;background:#3b1030;opacity:0}
 
 .islands{position:absolute;inset:0;pointer-events:none}
 .isl{position:absolute;top:0;will-change:transform,opacity;opacity:0;visibility:hidden}
@@ -343,16 +343,99 @@ input[type=email]:focus,input[type=date]:focus{border-color:var(--rosa);box-shad
   .two{grid-template-columns:1fr;gap:0}
   .path .line{width:8px}
 }
+
+/* ===== v13: agenda más rosa, con los diseños de Chhari, sin superposiciones ===== */
+:root{--rosa-fuerte:#E8478A;--rosa-suave:#FFD6E6;--rosa-hielo:#FFF0F6}
+
+/* barra y textos sobre imagen: difuminado en vez de choque */
+.bar{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:linear-gradient(180deg,rgba(58,12,42,.62),rgba(58,12,42,0))}
+.hero-copy .sub{display:inline-block;padding:9px 16px;border-radius:16px;background:rgba(48,10,36,.34);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.hint{padding:6px 14px;border-radius:12px;background:rgba(48,10,36,.3);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);width:max-content;margin:0 auto;left:0;right:0}
+
+/* marco del cuadro: halo rosa con difuminado del fondo */
+.panel::before{inset:-34px -26px;border-radius:64px;
+  background:radial-gradient(closest-side,rgba(255,110,176,.46),rgba(255,110,176,.12) 70%,rgba(255,110,176,0));
+  backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+.panel-in{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 calc(100% - 26px),transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 0,#000 calc(100% - 26px),transparent 100%)}
+
+/* tarjetas rosas */
+.card{
+  background:
+    radial-gradient(130% 48% at 14% -8%,rgba(255,255,255,.96),rgba(255,255,255,0) 62%),
+    radial-gradient(85% 55% at 100% 100%,rgba(255,86,160,.34),rgba(255,86,160,0) 72%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .75  0 0 0 0 .2  0 0 0 0 .45  0 0 0 .22 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>"),
+    linear-gradient(180deg,#fff1f7 0%,#ffd8e8 50%,#ffc2da 100%);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.95),
+    inset 0 -26px 38px -22px rgba(224,64,128,.40),
+    0 0 0 1.5px #f58cb8,
+    0 1px 2px rgba(60,10,40,.30),
+    0 12px 22px -8px rgba(60,10,40,.40),
+    0 36px 64px -24px rgba(60,10,40,.62),
+    0 0 84px rgba(255,92,166,.42);
+}
+.kicker.dark{color:var(--rosa-fuerte)}
+h2{color:#2c4a3a}
+em{color:var(--rosa-fuerte)}
+input[type=text],input[type=tel],input[type=email],input[type=date]{border-color:#f5a0c3;background:rgba(255,255,255,.92)}
+input:focus{border-color:var(--rosa-fuerte)!important;box-shadow:0 0 0 4px rgba(232,71,138,.2)!important}
+.serv span{border-color:#f5a0c3;background:rgba(255,255,255,.9)}
+.serv input:checked+span{border-color:var(--rosa-fuerte);background:#ffe4ef;box-shadow:0 6px 16px -8px rgba(232,71,138,.7)}
+.serv input:checked+span::before{background:var(--rosa-fuerte) radial-gradient(circle,#fff 28%,transparent 32%);border-color:var(--rosa-fuerte)}
+.btn{background:linear-gradient(180deg,#ff86b6 0%,#ee4f8f 100%);
+  box-shadow:0 12px 24px -9px rgba(224,64,128,.85),inset 0 1px 0 rgba(255,255,255,.6)}
+.btn.ghost{background:rgba(255,255,255,.55);color:#9b2a5c;box-shadow:inset 0 0 0 1.5px #ee4f8f}
+.btn.wa{background:linear-gradient(180deg,#34b36d,#1f8f55)}
+.btn:disabled{background:#e8cfd9;box-shadow:none}
+.dow span{color:var(--rosa-fuerte)}
+.day.libre{background:#fff;box-shadow:0 0 0 1.5px #f58cb8 inset}
+.day.libre:hover{background:#ffe4ef}
+.day.sel{background:linear-gradient(180deg,#ff86b6,#e8478a);box-shadow:0 10px 20px -8px rgba(224,64,128,.9)}
+.cal-head h3{color:#9b2a5c}
+.nav{border-color:#f5a0c3;color:#9b2a5c}
+.slot{border-color:#f5a0c3;background:rgba(255,255,255,.92)}
+.slot:hover{background:#ffe4ef}
+.slot.sel{background:linear-gradient(180deg,#ff86b6,#e8478a);border-color:#e8478a;color:#fff}
+.resumen-mini{background:rgba(255,255,255,.75);border-color:#f5a0c3}
+.ticket{background:rgba(255,255,255,.82);border-color:#ee4f8f}
+.ticket .total dd,.pasos li::before{color:var(--rosa-fuerte)}
+.pasos li::before{background:#9b2a5c;color:#ffe4ef}
+.alias{background:#ffe4ef}
+.copy{background:#9b2a5c}
+.reglas{background:rgba(255,255,255,.8);border-color:#f5a0c3}
+.legend i{border-radius:50%}
+.bubble{background:#ffe4ef}
+
+/* celular: sin superposiciones */
+@media(max-width:999px){
+  .panel{top:80px}
+  .panel-in{max-height:calc(100svh - 80px - 28svh)}
+  .lantern{top:-34px}
+  .say{bottom:20%;max-width:46vw;line-height:1.3}
+  .hero-copy .sub{font-size:.92rem;max-width:84vw}
+}
+@media(max-height:640px) and (max-width:999px){
+  .panel-in{max-height:calc(100svh - 80px - 28svh)}
+  .say{font-size:.76rem;padding:8px 10px}
+}
+
+/* escritorio: el globo va arriba de la cabeza de Chari (nunca sobre el cuadro) */
+@media(min-width:1000px){
+  .say{left:-6%;top:-13%;width:min(236px,26vw)}
+  .say::after{left:34px;bottom:-14px;border:8px solid transparent;border-top-color:var(--crema);border-bottom:0;border-right-color:transparent}
+}
 </style>
 </head>
 <body>
 <div id="journey">
  <div class="stage" id="stage">
   <div class="plates" id="plates" aria-hidden="true">
-    <div class="plate" style="background-image:url(assets/vid/p-luciernagas.jpg)"></div>
-    <div class="plate" style="background-image:url(assets/vid/p-rayos.jpg)"></div>
-    <div class="plate" style="background-image:url(assets/vid/p-bosque.jpg)"></div>
-    <div class="plate" style="background-image:url(assets/vid/p-arco.jpg)"></div>
+    <div class="plate" style="background-image:url(assets/vid/p-tunel.jpg)"></div>
+    <div class="plate" style="background-image:url(assets/vid/p-vuelo.jpg);background-position:30% 50%"></div>
+    <div class="plate" style="background-image:url(assets/vid/p-tienda.jpg);background-position:28% 50%"></div>
+    <div class="plate" style="background-image:url(assets/vid/p-cristal.jpg)"></div>
   </div>
   <canvas id="door-bg" aria-hidden="true"></canvas>
   <canvas id="door" aria-hidden="true"></canvas>
@@ -773,7 +856,7 @@ function render(P){
     put(el,"opacity",op.toFixed(3));
     put(el,"transform",`translate3d(0,0,0) scale(${(1.03+.16*t).toFixed(4)})`);
   });
-  put(shade2,"opacity",(.1+.38*ss(.44,.7,P)).toFixed(3));
+  put(shade2,"opacity",(.05+.26*ss(.44,.7,P)).toFixed(3));
 
   /* islas: solo transform/opacity */
   ISL.forEach((o,i)=>{
@@ -791,10 +874,10 @@ function render(P){
   const out=ss(.22,.38,P);                 // de la puerta al primer plano
   const far=ss(.42,1.0,P);                 // camina hacia el fondo del bosque
   const hBase=Math.min(VH*.78,820);
-  const near=MOB?VH*.30:VH*.66;
+  const near=MOB?VH*.26:VH*.66;
   const k=near/hBase*lerp(.34,1,out)*lerp(1,MOB?.64:.5,far);
   const cx=lerp(VW*.5,VW*(MOB?.22:(VW<1200?.14:.17)),out);
-  const rise=lerp(.15,0,out)*VH + far*(MOB?.10:.22)*VH;
+  const rise=lerp(.15,0,out)*VH + far*(MOB?.03:.22)*VH;
   const walk=P*240, amp=ss(.24,.34,P);
   const bounce=Math.abs(Math.sin(walk))*10*amp*Math.max(.5,k*1.4);
   wob.walk=walk; wob.enter=enter; wob.amp=amp;
@@ -804,7 +887,15 @@ function render(P){
   put(say,"scale",(1/k).toFixed(3));
   const s=sayFor(P), on=!!s&&enter>.8;
   if(s!==lastSay){lastSay=s;say.textContent=s}
-  say.classList.toggle("on",on);
+  let hide=false;
+  if(on && MOB){
+    const act=document.querySelector(".panel.act .panel-in");
+    if(act){
+      const pr=act.getBoundingClientRect(), sr=say.getBoundingClientRect();
+      hide = sr.top < pr.bottom+4 && sr.bottom > pr.top && sr.left < pr.right && sr.right > pr.left;
+    }
+  }
+  say.classList.toggle("on",on&&!hide);
 
   /* título de entrada */
   const hin=ss(.28,.34,P), hout=ss(.47,.54,P);
