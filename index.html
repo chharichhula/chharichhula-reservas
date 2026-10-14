@@ -440,16 +440,43 @@ input:focus{border-color:var(--rosa-fuerte)!important;box-shadow:0 0 0 4px rgba(
 /* capas estables: se rasterizan una vez y solo se mueven por GPU */
 .plate,.isl,.fairy,.panel,.hero-copy,#door,#door-bg{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform-style:flat}
 .fairy img,.isl img{image-rendering:auto}
+
+/* ===== v15: ningún adorno pisa los textos ===== */
+.card{padding:66px 26px 66px}
+.card::before{aspect-ratio:auto;height:56px;top:-30px;left:-8px;right:-8px;background-size:100% 100%}
+.card .orn{width:54px;height:57px}
+.card .orn.tl,.card .orn.tr{top:4px}
+.card .orn.bl,.card .orn.br{bottom:4px}
+.card .orn.tl,.card .orn.bl{left:6px}
+.card .orn.tr,.card .orn.br{right:6px}
+.card.lock{padding-top:70px}
+
+/* escritorio: los adornos grandes van afuera del cuadro y del lado donde no está Chari */
+@media(min-width:1000px){
+  .d-vine-l,.d-vine-r,.d-farn-l,.d-farn-r,.d-flor{display:none}
+  .d-mush{left:auto;right:-132px;bottom:-26px;width:156px;transform:none}
+  .d-crys{right:-100px;top:-44px;width:140px}
+}
+@media(max-width:999px){
+  .card{padding:58px 18px 56px}
+  .card .orn{width:40px;height:42px}
+  .card::before{height:44px;top:-24px}
+  .card.lock{padding-top:60px}
+}
+
+@media(max-width:999px){.panel{width:min(560px,calc(100% - 24px))}}
+
+@media(max-width:999px){.d-flor,.d-crys{display:none}}
 </style>
 </head>
 <body>
 <div id="journey">
  <div class="stage" id="stage">
   <div class="plates" id="plates" aria-hidden="true">
-    <div class="plate" style="background-image:url(assets/vid/p-tunel.jpg)"></div>
-    <div class="plate" style="background-image:url(assets/vid/p-vuelo.jpg);background-position:30% 50%"></div>
-    <div class="plate" style="background-image:url(assets/vid/p-tienda.jpg);background-position:28% 50%"></div>
-    <div class="plate" style="background-image:url(assets/vid/p-cristal.jpg)"></div>
+    <div class="plate" style="background-image:url(assets/vid/p-tunel-solo.jpg)"></div>
+    <div class="plate" style="background-image:url(assets/vid/p-cristal-solo.jpg)"></div>
+    <div class="plate" style="background-image:url(assets/vid/p-tienda-solo.jpg)"></div>
+    <div class="plate" style="background-image:url(assets/vid/p-tronco-solo.jpg)"></div>
   </div>
   <canvas id="door-bg" aria-hidden="true"></canvas>
   <canvas id="door" aria-hidden="true"></canvas>
