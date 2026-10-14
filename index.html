@@ -426,6 +426,20 @@ input:focus{border-color:var(--rosa-fuerte)!important;box-shadow:0 0 0 4px rgba(
   .say{left:-6%;top:-13%;width:min(236px,26vw)}
   .say::after{left:34px;bottom:-14px;border:8px solid transparent;border-top-color:var(--crema);border-bottom:0;border-right-color:transparent}
 }
+
+/* ===== v14: todo quieto al scrollear (nada tiembla) ===== */
+.fairy .body,.fairy .tilt{animation:none!important;transition:none!important}
+.lantern{animation:none!important;transform:none!important}
+.lantern::before{animation:none!important;opacity:.9}
+/* los desenfoques "backdrop" detrás de capas que se mueven hacen vibrar: se cambian por velos sólidos */
+.bar,.hero-copy .sub,.hint,.panel::before{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.bar{background:linear-gradient(180deg,rgba(58,12,42,.80) 0%,rgba(58,12,42,.45) 60%,rgba(58,12,42,0) 100%)}
+.hero-copy .sub{background:rgba(48,10,36,.52)}
+.hint{background:rgba(48,10,36,.5)}
+.panel::before{background:radial-gradient(closest-side,rgba(255,110,176,.40),rgba(255,110,176,.10) 70%,rgba(255,110,176,0))}
+/* capas estables: se rasterizan una vez y solo se mueven por GPU */
+.plate,.isl,.fairy,.panel,.hero-copy,#door,#door-bg{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform-style:flat}
+.fairy img,.isl img{image-rendering:auto}
 </style>
 </head>
 <body>
@@ -866,7 +880,7 @@ function render(P){
     put(el,"visibility",op<.01?"hidden":"visible");
     put(el,"opacity",op.toFixed(3));
     const y=lerp(o.y0,o.y1,t)/100*VH;
-    put(el,"transform",`translate3d(0,${y.toFixed(1)}px,0) scale(${(.55+.9*t).toFixed(3)}) rotate(${((t-.5)*(o.side==="l"?-6:6)).toFixed(2)}deg)`);
+    put(el,"transform",`translate3d(0,${y.toFixed(2)}px,0) scale(${(.55+.9*t).toFixed(4)})`);
   });
 
   /* hada: sale de la puerta y recorre el bosque, internándose hacia el fondo */
@@ -879,11 +893,11 @@ function render(P){
   const cx=lerp(VW*.5,VW*(MOB?.22:(VW<1200?.14:.17)),out);
   const rise=lerp(.15,0,out)*VH + far*(MOB?.03:.22)*VH;
   const walk=P*240, amp=ss(.24,.34,P);
-  const bounce=Math.abs(Math.sin(walk))*10*amp*Math.max(.5,k*1.4);
+  const bounce=0;
   wob.walk=walk; wob.enter=enter; wob.amp=amp;
   put(fairy,"visibility",enter<.01?"hidden":"visible");
   put(fairy,"opacity",enter.toFixed(3));
-  put(fairy,"transform",`translate3d(${(cx-FW/2).toFixed(1)}px,${(-rise-bounce).toFixed(1)}px,0) scale(${k.toFixed(4)})`);
+  put(fairy,"transform",`translate3d(${(cx-FW/2).toFixed(2)}px,${(-rise).toFixed(2)}px,0) scale(${k.toFixed(4)})`);
   put(say,"scale",(1/k).toFixed(3));
   const s=sayFor(P), on=!!s&&enter>.8;
   if(s!==lastSay){lastSay=s;say.textContent=s}
@@ -900,7 +914,7 @@ function render(P){
   /* título de entrada */
   const hin=ss(.28,.34,P), hout=ss(.47,.54,P);
   put(hc,"opacity",(hin*(1-hout)).toFixed(3));
-  put(hc,"transform",`translate3d(0,${(lerp(30,0,hin)-lerp(0,30,hout)).toFixed(1)}px,0)`);
+  put(hc,"transform",`translate3d(0,${(lerp(30,0,hin)-lerp(0,30,hout)).toFixed(2)}px,0)`);
   /* el logo aparece entre humo rosa y polvo de hadas */
   const lg=ss(.30,.42,P);
   put(logo,"opacity",lg.toFixed(3));
