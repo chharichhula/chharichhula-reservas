@@ -46,7 +46,7 @@ button,input{font:inherit;color:inherit}
 @keyframes fall{to{transform:translate(var(--dx),112vh) rotate(var(--rot))}}
 
 /* ===== el hada ===== */
-.fairy{position:absolute;left:0;bottom:-1svh;height:min(78svh,820px);aspect-ratio:var(--ar,.43);z-index:6;
+.fairy{position:absolute;left:0;bottom:-1svh;height:min(78svh,820px);aspect-ratio:var(--ar,.5234);z-index:6;
   transform-origin:50% 100%;opacity:0;visibility:hidden;will-change:transform,opacity;pointer-events:none}
 .fairy .tilt,.fairy .body{position:absolute;inset:0}
 .fairy canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -340,7 +340,7 @@ input[type=email]:focus,input[type=date]:focus{border-color:var(--rosa);box-shad
 
   <!-- Chari, la guía -->
   <div class="fairy" id="fairy">
-    <div class="tilt" id="tilt"><canvas id="fairy-gl" aria-hidden="true"></canvas><div class="body"><img id="fairy-img" src="assets/hada-cuerpo.webp" alt="Chari, el hada de las uñas"></div></div>
+    <div class="tilt" id="tilt"><canvas id="fairy-gl" aria-hidden="true"></canvas><div class="body"><img id="fairy-img" src="assets/chari-3d.png" alt="Chari, el hada de las uñas"></div></div>
     <span class="shadow"></span>
     <div class="say" id="say" role="status" aria-live="polite"></div>
   </div>
@@ -627,7 +627,7 @@ addEventListener("resize",()=>{lastDrawn=-1;drawFrame(curFrame)});
 /* ---------- estado de la reserva ---------- */
 const state={nombre:"",apellido:"",tel:"",mail:"",cumple:"",consent:false,servicio:null,mes:null,fecha:null,hora:null,sena:false};
 const plates=$$(".plate");
-const WIN=[[.30,.35,.50,.55],[.47,.53,.68,.73],[.65,.71,.84,.89],[.82,.88,1.1,1.2]];
+const WIN=[[.34,.42,.50,.55],[.47,.53,.68,.73],[.65,.71,.84,.89],[.82,.88,1.1,1.2]];
 const fairy=$("#fairy"), say=$("#say"), bar=$("#bar"), shade2=$("#shade2");
 const PANELS=[["#p-datos",.46,.64],["#p-cal",.66,.82],["#p-sena",.84,1.01]].map(a=>({el:$(a[0]),a:a[1],b:a[2]}));
 const hc=$("#hero-copy"), hint=$("#hint");
@@ -715,11 +715,12 @@ const wob={walk:0,enter:0,amp:0};
 let lastSay="", lastStep=0;
 function render(P){
   /* puerta */
-  if(P<.42){ curFrame=P/.26*(FRAMES-1); drawFrame(clamp(curFrame,0,FRAMES-1)); }
-  const doorOp=1-ss(.31,.40,P);
+  if(P<.5){ curFrame=P/.26*(FRAMES-1); drawFrame(clamp(curFrame,0,FRAMES-1)); }
+  const doorOp=1-ss(.36,.48,P);
   put(doorC,"opacity",doorOp.toFixed(3)); put(bgC,"opacity",doorOp.toFixed(3));
   put(doorC,"visibility",doorOp<.01?"hidden":"visible"); put(bgC,"visibility",doorOp<.01?"hidden":"visible");
-  put(doorC,"transform",`scale(${(1+.14*ss(.14,.34,P)).toFixed(4)})`);
+  const need=Math.max(1.35,(VW/VH)/(9/16));
+  put(doorC,"transform",`scale(${(1+(need-1)*Math.pow(ss(.16,.46,P),1.35)).toFixed(4)})`);
   put(hint,"opacity",(1-ss(0,.04,P)).toFixed(3));
 
   /* fondos que se atraviesan */
@@ -744,19 +745,21 @@ function render(P){
     put(el,"transform",`translate3d(0,${y.toFixed(1)}px,0) scale(${(.55+.9*t).toFixed(3)}) rotate(${((t-.5)*(o.side==="l"?-6:6)).toFixed(2)}deg)`);
   });
 
-  /* hada: entra, se corre a un costado y camina con el scroll */
-  const enter=ss(.20,.31,P), move=ss(.44,.54,P);
+  /* hada: sale de la puerta y recorre el bosque, internándose hacia el fondo */
+  const enter=ss(.20,.30,P);
+  const out=ss(.22,.38,P);                 // de la puerta al primer plano
+  const far=ss(.42,1.0,P);                 // camina hacia el fondo del bosque
   const hBase=Math.min(VH*.78,820);
-  const target=MOB?VH*.30:VH*.66;
-  const k=target/hBase;
-  const cx=VW*(MOB?.22:.2);
-  const walk=P*180, amp=ss(.3,.4,P);
-  const bounce=0;
-  const sway=0;
+  const near=MOB?VH*.30:VH*.66;
+  const k=near/hBase*lerp(.34,1,out)*lerp(1,MOB?.64:.5,far);
+  const cx=lerp(VW*.5,VW*(MOB?.22:.2),out);
+  const rise=lerp(.15,0,out)*VH + far*(MOB?.10:.22)*VH;
+  const walk=P*240, amp=ss(.24,.34,P);
+  const bounce=Math.abs(Math.sin(walk))*10*amp*Math.max(.5,k*1.4);
   wob.walk=walk; wob.enter=enter; wob.amp=amp;
   put(fairy,"visibility",enter<.01?"hidden":"visible");
   put(fairy,"opacity",enter.toFixed(3));
-  put(fairy,"transform",`translate3d(${(cx-FW/2).toFixed(1)}px,${(-bounce+lerp(14,0,enter)/100*hBase).toFixed(1)}px,0) scale(${k.toFixed(4)}) rotate(${sway.toFixed(2)}deg)`);
+  put(fairy,"transform",`translate3d(${(cx-FW/2).toFixed(1)}px,${(-rise-bounce).toFixed(1)}px,0) scale(${k.toFixed(4)})`);
   put(say,"scale",(1/k).toFixed(3));
   const s=sayFor(P), on=!!s&&enter>.8;
   if(s!==lastSay){lastSay=s;say.textContent=s}
