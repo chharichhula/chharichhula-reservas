@@ -67,14 +67,14 @@ button,input{font:inherit;color:inherit}
 .bar{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;
   background:linear-gradient(180deg,rgba(12,42,31,.8),rgba(12,42,31,0));opacity:0;transition:opacity .5s}
 .bar.on{opacity:1}
-.bar img{width:130px;height:auto}
+.bar img{width:170px;height:auto}
 .path{display:flex;align-items:center;gap:6px;color:var(--rosa-claro);font-size:.76rem}
 .path .p{display:flex;align-items:center;gap:6px;opacity:.5;transition:opacity .3s}
 .path .p b{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--rosa-claro);font-size:.75rem;transition:.3s}
 .path .p.on{opacity:1}.path .p.on b{background:var(--rosa);border-color:var(--rosa);color:#fff;box-shadow:0 0 0 4px rgba(238,93,147,.28)}
 .path .p.done{opacity:.9}.path .p.done b{background:var(--rosa-claro);color:var(--bosque)}
 .path .line{width:16px;border-top:2px dotted rgba(248,213,225,.5)}
-@media(max-width:560px){.path .p span{display:none}.bar img{width:108px}}
+@media(max-width:560px){.path .p span{display:none}.bar img{width:128px}}
 @media(max-height:640px){.sub{display:none}}
 
 .hero-copy{position:absolute;left:0;right:0;top:7svh;z-index:9;text-align:center;padding:0 20px;opacity:0;pointer-events:none}
@@ -251,7 +251,7 @@ input[type=email]:focus,input[type=date]:focus{border-color:var(--rosa);box-shad
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 #magic{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
 .hero-copy{top:6svh!important}
-.logo-reveal{display:block;width:min(330px,66vw);height:auto;margin:0 auto;opacity:0;transform-origin:50% 60%;
+.logo-reveal{display:block;width:min(470px,84vw);height:auto;margin:0 auto;opacity:0;transform-origin:50% 60%;
   filter:drop-shadow(0 0 14px rgba(255,92,160,.65)) drop-shadow(0 4px 18px rgba(0,0,0,.35));will-change:transform,opacity}
 
 .card{
@@ -322,7 +322,7 @@ input[type=email]:focus,input[type=date]:focus{border-color:var(--rosa);box-shad
   <div class="petals" id="petals" aria-hidden="true"></div>
 
   <header class="bar" id="bar">
-    <img src="assets/wordmark-claro.webp" alt="Chhari Chhula, hada de las uñas">
+    <img src="assets/wordmark-claro.webp" alt="Chhari Chhula, el hada de las uñas">
     <nav class="path" aria-label="Pasos de la reserva">
       <div class="p on" data-p="1"><b>1</b><span>Tus datos</span></div><div class="line"></div>
       <div class="p" data-p="2"><b>2</b><span>Tu día</span></div><div class="line"></div>
