@@ -492,9 +492,45 @@ input[type=text],input[type=tel],input[type=email],input[type=date]{background:#
 .resumen-mini,.reglas{background:rgba(255,253,248,.85);border-color:#e6c9b4}
 .ticket{background:#fffdf8}
 .shade{background:linear-gradient(180deg,rgba(30,40,28,.42) 0%,rgba(30,40,28,0) 30%,rgba(30,40,28,0) 62%,rgba(40,20,32,.5) 100%)}
+
+/* ===== modo mantenimiento (se controla con estado.json) ===== */
+#mant{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;
+  background:radial-gradient(120% 90% at 50% 0%,#ffd9e8 0%,#f6e3d3 55%,#cfe0c8 100%);text-align:center}
+#mant.on{display:flex}
+#mant .box{max-width:420px;width:100%;background:#fffaf0;border-radius:28px;padding:34px 26px;box-shadow:0 0 0 1.5px #e7c9a4,0 24px 60px -20px rgba(40,24,20,.45)}
+#mant img{width:min(240px,70%);height:auto;margin:0 auto 18px;display:block}
+#mant h1{font-family:"Bodoni Moda",serif;font-size:1.5rem;color:#2c4a3a;margin:0 0 10px;font-weight:600}
+#mant p{margin:0 0 20px;color:#4a3a36;line-height:1.5}
+#mant a{display:inline-block;padding:13px 22px;border-radius:999px;color:#fff;text-decoration:none;font-weight:600;background:linear-gradient(180deg,#ff86b6,#ee4f8f)}
+body.mant-lock{overflow:hidden}
 </style>
 </head>
 <body>
+<div id="mant" role="alertdialog" aria-modal="true" aria-labelledby="mant-t">
+  <div class="box">
+    <img src="assets/logo-chhari.webp" alt="Chhari Chhula, el hada de las uñas">
+    <h1 id="mant-t">Volvemos muy pronto</h1>
+    <p id="mant-msg">Estamos preparando algo mágico en el bosque.</p>
+    <a id="mant-wa" href="#" rel="noopener">Escribinos por WhatsApp</a>
+  </div>
+</div>
+<script>
+/* Modo mantenimiento: editá estado.json ("mantenimiento": true/false). ?preview entra igual; ?mantenimiento lo fuerza para probar */
+(function(){
+  var q=location.search;
+  function on(msg){
+    var el=document.getElementById("mant"); if(!el) return;
+    if(msg) document.getElementById("mant-msg").textContent=msg;
+    document.getElementById("mant-wa").href="https://wa.me/5493517593713";
+    el.classList.add("on"); document.body.classList.add("mant-lock");
+  }
+  if(q.indexOf("preview")>-1) return;
+  if(q.indexOf("mantenimiento")>-1){ on(); return; }
+  fetch("estado.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():null})
+    .then(function(j){ if(j && j.mantenimiento===true) on(j.mensaje); }).catch(function(){});
+})();
+</script>
+
 <div id="journey">
  <div class="stage" id="stage">
   <div class="plates" id="plates" aria-hidden="true">
