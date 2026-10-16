@@ -1,7 +1,7 @@
 /* Configuración PÚBLICA del sitio. No poner acá tokens, claves ni datos de clientas. */
 window.CHHARI = {
   // Dirección de la aplicación web del servidor (Google Apps Script). Ver SERVIDOR.md.
-  api: "https://script.google.com/macros/s/AKfycbxEvl6oq2AsbyAQpu0DCgHqF6vUpP-PPVDQMOvUibXmo1Tctjl7YSzhQXNFZTivDXGcHA/exec",
+  api: "https://script.google.com/macros/s/AKfycbznBfCOc4kYhq6uYmXFH5DVrgG1pTCLaiSRJjqtkD65Nj1rOqGzyrcJHPCQllX_4cgqdg/exec",
   whatsapp: "5493517593713",
   sena: 10000,
   duracionMinFallback: 120,
