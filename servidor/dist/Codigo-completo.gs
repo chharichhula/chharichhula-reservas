@@ -640,6 +640,7 @@ function estadoReserva_(id, token) {
 /** POST checkout — (re)abre Mercado Pago o vuelve a transferencia para una reserva pendiente. */
 function elegirMedio_(id, token, medio) {
   if (medio !== MEDIO.TRANSF && medio !== MEDIO.MP) return err_("medio", "Elegí un medio de pago válido.");
+  if (medio === MEDIO.MP && !propiedad_("MP_ACCESS_TOKEN")) return err_("mp_no_configurado", "El pago con Mercado Pago todavía no está disponible. Podés pagar por transferencia.");
   var res = conLock_(function () {
     vencerCaducadas_();
     var r = autorizar_(id, token);
