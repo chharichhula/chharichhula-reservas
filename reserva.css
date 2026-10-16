@@ -1,0 +1,53 @@
+/* Componentes de la reserva real: estados, pago, gestión, mantenimiento. Mismos tokens que style.css. */
+
+.booking-steps button:disabled{opacity:.5;cursor:not-allowed}
+.booking-steps[hidden]{display:none}
+.mini-title{font-size:13px;font-weight:700;color:#6f2949;margin:14px 0 4px}
+.booking-policy ul{margin-top:8px}
+.booking-policy a,.politica-info a{color:#a91c5c}
+
+.credit-banner{margin:0 0 18px;padding:13px 15px;border-radius:12px;background:#ffe5f1;border:1px solid #f0b4cf;color:#6f2949;font-size:13px;line-height:1.6}
+.calendar-status{min-height:20px;margin:10px 0 0;font-size:13px;line-height:1.6;color:#775263}
+.calendar-status .text-button{display:inline;width:auto;min-height:0;padding:0 2px;margin:0}
+.calendar-days[aria-busy=true]{opacity:.5}
+
+.estado-reserva{display:inline-block;margin:6px 0 18px;padding:7px 14px;border-radius:999px;font-size:13px;font-weight:700;background:#ffe5f1;color:#8b2855;border:1px solid #f0b4cf}
+.estado-confirmada{background:#e3f6ea;color:#17613a;border-color:#a6dcba}
+.estado-cancelada,.estado-vencida,.estado-noasistio{background:#f3e6ea;color:#7a3f55;border-color:#dcbac6}
+.estado-revision{background:#fff2d9;color:#8a5a00;border-color:#efd08f}
+
+.alias-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 12px}
+.alias-row code{font-size:20px;font-weight:700;letter-spacing:.02em;padding:9px 16px;border-radius:12px;background:#fff;border:1px dashed #cf206f;color:#772344}
+.copy-alias{min-height:40px;padding:8px 15px;border-radius:12px;border:1px solid #cf206f;background:#fff;color:#a81456;font-weight:700;font-size:13px}
+.copy-alias:hover{background:#ffe5f1}
+
+.acciones{display:grid;gap:10px;margin:20px 0 4px}
+.pink-button.ghost{background:#fff;color:#a81456;border:1px solid #cf206f}
+.pink-button.ghost:not(:disabled):hover{background:#ffe5f1;border-color:#cf206f}
+.pink-button.danger{background:#8c1d47;border-color:#8c1d47}
+.pink-button.danger:not(:disabled):hover{background:#741638}
+.pink-button.wide{width:100%}
+.politica-info{font-size:13px;line-height:1.7;color:#5d3a4b;background:#fffafd;border:1px solid #e8c4d5;border-radius:12px;padding:14px 16px;margin:16px 0}
+.cancelar-box{margin:14px 0}
+.confirmar-cancelar{display:grid;gap:10px}
+.panel-lead{margin:0 0 14px}
+
+.toast{position:fixed;left:50%;bottom:90px;z-index:60;transform:translate(-50%,16px);opacity:0;pointer-events:none;background:#4a2035;color:#fff0f7;padding:11px 18px;border-radius:12px;font-size:13px;box-shadow:0 8px 22px #0004;transition:opacity .2s,transform .2s;max-width:88vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* modo mantenimiento */
+#mant{position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;padding:20px;background:radial-gradient(120% 90% at 50% 0%,#ffd9e8 0%,#f6e3d3 55%,#cfe0c8 100%);text-align:center;display:flex}
+#mant[hidden]{display:none}
+#mant .box{max-width:420px;width:100%;background:#fffaf0;border-radius:28px;padding:34px 26px;box-shadow:0 0 0 1.5px #e7c9a4,0 24px 60px -20px rgba(40,24,20,.45);color:#4a3a36}
+#mant img{width:min(240px,70%);height:auto;margin:0 auto 18px;display:block}
+#mant h1{font-family:var(--font-display,serif);font-size:1.5rem;color:#2c4a3a;margin:0 0 10px;font-weight:600}
+#mant p{margin:0 0 20px;line-height:1.5}
+#mant a{display:inline-block;padding:13px 22px;border-radius:12px;color:#fff;text-decoration:none;font-weight:650;background:#cf206f}
+body.mant-lock{overflow:hidden}
+
+@media(prefers-reduced-motion:reduce){.toast{transition:none}}
+@media(max-width:700px){.alias-row code{font-size:18px}}
+
+/* En la zona de reserva los controles de movimiento pasan al final de la página: nunca tapan campos ni botones. */
+.booking-in-view .motion-controls{position:static;justify-content:center;padding:6px 5vw 34px;background:#2b132a;opacity:1}
+.booking-in-view .journey-replay{display:none}
