@@ -1,528 +1,31 @@
 <!doctype html>
 <html lang="es-AR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>El bosque de Chari · Reservá tu turno</title>
-<meta name="description" content="Cruzá la puerta del bosque de Chhari Chhula, hada de las uñas, y reservá tu turno de manicura acompañada por Chari.">
-<link rel="preload" href="assets/fonts/BodoniModa.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/BodoniModa-Italic.woff2" as="font" type="font/woff2" crossorigin>
-<style>
-@font-face{font-family:"Bodoni Moda";src:url(assets/fonts/BodoniModa.woff2) format("woff2");font-weight:400 900;font-style:normal;font-display:swap}
-@font-face{font-family:"Bodoni Moda";src:url(assets/fonts/BodoniModa-Italic.woff2) format("woff2");font-weight:400 900;font-style:italic;font-display:swap}
-:root{
-  --rosa:#EE5D93; --rosa-hongo:#F0789B; --rosa-claro:#F8D5E1; --rosa-pale:#FCE8EF;
-  --bosque:#1B4D3A; --bosque-hondo:#0F3123; --bosque-luz:#2E6B52; --hoja:#264D33;
-  --crema:#FFF7EE; --tinta:#2A2320;
-  --serif:"Bodoni Moda","Didot",Georgia,serif;
-  --sans:"Avenir Next","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
-  --ease:cubic-bezier(.23,1,.32,1);
-}
-*{box-sizing:border-box;margin:0}
-html{-webkit-text-size-adjust:100%;background:var(--bosque-hondo)}
-body{font-family:var(--sans);color:var(--tinta);overflow-x:hidden;background:var(--bosque-hondo)}
-img{display:block;max-width:100%}
-button,input{font:inherit;color:inherit}
-[hidden]{display:none!important}
-
-/* ===== el viaje: una sola escena fija ===== */
-#journey{position:relative;height:1500svh}
-.stage{position:sticky;top:0;height:100svh;overflow:hidden;background:#12200f}
-.plates{position:absolute;inset:0}
-.plate{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;visibility:hidden;will-change:transform,opacity;backface-visibility:hidden}
-#door-bg,#door{position:absolute;inset:0;width:100%;height:100%;display:block;will-change:transform,opacity}
-#door-bg{opacity:1}
-#door{box-shadow:0 0 80px rgba(0,0,0,.55)}
-.shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(8,26,18,.7) 0%,rgba(8,26,18,0) 34%,rgba(8,26,18,0) 60%,rgba(8,26,18,.72) 100%)}
-.shade2{position:absolute;inset:0;pointer-events:none;background:#3b1030;opacity:0}
-
-.islands{position:absolute;inset:0;pointer-events:none}
-.isl{position:absolute;top:0;will-change:transform,opacity;opacity:0;visibility:hidden}
-.isl img{display:block;width:100%;height:auto;}
-.fireflies,.petals{position:absolute;inset:0;pointer-events:none}
-.fireflies i{position:absolute;width:6px;height:6px;border-radius:50%;background:#ffd9e6;box-shadow:0 0 14px 5px rgba(255,160,200,.55);opacity:0;animation:fly 9s ease-in-out infinite}
-@keyframes fly{0%{opacity:0;transform:translate(0,0)}20%{opacity:.95}60%{opacity:.7;transform:translate(34px,-60px)}100%{opacity:0;transform:translate(-24px,-130px)}}
-.petals i{position:absolute;top:-6vh;width:11px;height:15px;border-radius:70% 0 70% 0;opacity:.8;animation:fall linear infinite}
-@keyframes fall{to{transform:translate(var(--dx),112vh) rotate(var(--rot))}}
-
-/* ===== el hada ===== */
-.fairy{position:absolute;left:0;bottom:-1svh;height:min(78svh,820px);aspect-ratio:var(--ar,.5234);z-index:6;
-  transform-origin:50% 100%;opacity:0;visibility:hidden;will-change:transform,opacity;pointer-events:none}
-.fairy .tilt,.fairy .body{position:absolute;inset:0}
-.fairy canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.fairy img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-.fairy.gl img{visibility:hidden}
-.fairy .shadow{position:absolute;left:8%;right:8%;bottom:0;height:3.2svh;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent);transform:translateY(50%)}
-.say{position:absolute;z-index:7;left:84%;top:2%;width:min(230px,60vw);background:var(--crema);color:var(--bosque);
-  border-radius:18px 18px 18px 4px;padding:12px 15px;font-size:.92rem;line-height:1.38;font-weight:500;
-  box-shadow:0 14px 30px -12px rgba(0,0,0,.55),0 0 0 1.5px var(--rosa-claro) inset;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s var(--ease)}
-.say.on{opacity:1;transform:none}
-.say{transform-origin:0 100%}
-.say::after{content:"";position:absolute;left:-7px;bottom:10px;border:8px solid transparent;border-right-color:var(--crema);border-left:0}
-@media(max-width:999px){
-  .say{left:100%;top:auto;bottom:34%;width:min(46vw,200px);font-size:.84rem;padding:10px 12px}
-}
-
-/* ===== textos y paneles ===== */
-.bar{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;
-  background:linear-gradient(180deg,rgba(12,42,31,.8),rgba(12,42,31,0));opacity:0;transition:opacity .5s}
-.bar.on{opacity:1}
-.bar img{width:170px;height:auto}
-.path{display:flex;align-items:center;gap:6px;color:var(--rosa-claro);font-size:.76rem}
-.path .p{display:flex;align-items:center;gap:6px;opacity:.5;transition:opacity .3s}
-.path .p b{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--rosa-claro);font-size:.75rem;transition:.3s}
-.path .p.on{opacity:1}.path .p.on b{background:var(--rosa);border-color:var(--rosa);color:#fff;box-shadow:0 0 0 4px rgba(238,93,147,.28)}
-.path .p.done{opacity:.9}.path .p.done b{background:var(--rosa-claro);color:var(--bosque)}
-.path .line{width:16px;border-top:2px dotted rgba(248,213,225,.5)}
-@media(max-width:560px){.path .p span{display:none}.bar img{width:128px}}
-@media(max-height:640px){.sub{display:none}}
-
-.hero-copy{position:absolute;left:0;right:0;top:7svh;z-index:9;text-align:center;padding:0 20px;opacity:0;pointer-events:none}
-.kicker{font-family:var(--serif);letter-spacing:.2em;text-transform:uppercase;font-size:.78rem;color:var(--rosa-claro);margin-bottom:10px;font-weight:600}
-h1,h2{font-family:var(--serif);font-weight:600;line-height:1.05}
-h1{font-size:clamp(1.9rem,6.4vw,3.6rem);line-height:1.08;color:var(--crema);text-shadow:0 3px 24px rgba(0,0,0,.55)}
-h2{font-size:clamp(1.4rem,3.4vw,2rem);color:var(--bosque)}
-em{font-style:italic;color:var(--rosa)}
-h1 em{color:var(--rosa-claro)}
-.sub{margin:10px auto 0;max-width:34ch;color:#fff3f6;line-height:1.45;font-size:1.02rem;text-shadow:0 2px 14px rgba(0,0,0,.6)}
-.hint{position:absolute;left:0;right:0;bottom:5svh;text-align:center;color:var(--crema);font-family:var(--serif);letter-spacing:.2em;text-transform:uppercase;font-size:.78rem;text-shadow:0 2px 10px rgba(0,0,0,.6);z-index:6}
-.hint::after{content:"";display:block;width:1.5px;height:34px;margin:10px auto 0;background:var(--rosa);animation:drip 1.8s ease-in-out infinite;transform-origin:top}
-@keyframes drip{0%{transform:scaleY(0)}60%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
-
-.panel{position:absolute;z-index:10;right:3vw;top:68px;width:min(540px,46vw);max-height:calc(100svh - 88px);overflow:auto;
-  padding:22px 4px 40px;opacity:0;pointer-events:none;transform:translateY(24px);scrollbar-width:thin;scrollbar-color:var(--rosa) transparent}
-.panel.act{pointer-events:auto}
-@media(max-width:999px){.panel{left:12px;right:12px;width:auto;top:60px;max-height:calc(100svh - 60px - 32svh)}}
-.card{position:relative;background:var(--crema);border-radius:24px;padding:26px 22px;margin-bottom:18px;
-  box-shadow:0 0 0 1.5px var(--rosa-claro) inset,0 24px 50px -22px rgba(0,0,0,.65)}
-.card::before{content:"";position:absolute;left:-2px;right:-2px;top:-15px;height:30px;pointer-events:none;
-  background:
-    radial-gradient(circle at 14px 18px,var(--bosque-luz) 11px,transparent 12px) 0 0/28px 30px repeat-x,
-    radial-gradient(circle at 5px 24px,var(--hoja) 10px,transparent 11px) 0 0/32px 30px repeat-x,
-    radial-gradient(circle at 22px 10px,#5E9B6A 7px,transparent 8px) 0 0/40px 30px repeat-x;
-  border-radius:24px 24px 0 0}
-.kicker.dark{color:var(--rosa);margin-bottom:6px}
-.card p.lead{margin:8px 0 18px;color:#4a3f3a;line-height:1.5;font-size:.95rem}
-.lock{text-align:center;padding:28px 10px}
-.lock p{color:var(--bosque);line-height:1.5;margin-bottom:16px}
-
-form .field{margin-bottom:15px}
-label:not(.serv),.lbl{display:block;font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:var(--bosque);margin-bottom:7px}
-input[type=text],input[type=tel],input[type=email],input[type=date]{width:100%;padding:14px 16px;border-radius:14px;border:1.5px solid var(--rosa-claro);background:#fff;outline:none;font-size:1rem;transition:border-color .2s,box-shadow .2s}
-input[type=text]:focus,input[type=tel]:focus{border-color:var(--rosa);box-shadow:0 0 0 4px rgba(238,93,147,.18)}
-.field.err input{border-color:#c4284f}
-.msg{display:none;font-size:.8rem;color:#c4284f;margin-top:6px}
-.field.err .msg{display:block}
-.servicios{display:grid;gap:8px}
-.serv{position:relative}
-.serv input{position:absolute;opacity:0;inset:0;cursor:pointer;z-index:2}
-.serv span{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:14px;border:1.5px solid var(--rosa-claro);background:#fff;transition:.2s}
-.serv span::before{content:"";flex:none;width:18px;height:18px;border-radius:50%;border:2px solid var(--rosa-claro);transition:.2s}
-.serv small{display:block;color:#7a6b64;font-size:.78rem;margin-top:1px}
-.serv input:checked+span{border-color:var(--rosa);background:var(--rosa-pale)}
-.serv input:checked+span::before{border-color:var(--rosa);background:var(--rosa) radial-gradient(circle,#fff 28%,transparent 32%)}
-.serv input:focus-visible+span{box-shadow:0 0 0 4px rgba(238,93,147,.3)}
-.field.err .servicios{outline:2px dashed #c4284f;outline-offset:5px;border-radius:14px}
-
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 26px;border:0;border-radius:99px;cursor:pointer;
-  font-weight:700;letter-spacing:.02em;font-size:1rem;background:var(--rosa);color:#fff;text-decoration:none;box-shadow:0 10px 22px -10px var(--rosa);transition:transform .16s var(--ease)}
-.btn:active{transform:scale(.97)}
-@media (hover:hover) and (pointer:fine){.btn:hover{transform:translateY(-2px)}}
-.btn:disabled{background:#d9c9c2;box-shadow:none;cursor:not-allowed}
-.btn.wide{width:100%}
-.btn.wa{background:#1f8f55;box-shadow:0 10px 22px -10px #1f8f55}
-.btn.ghost{background:transparent;color:var(--bosque);box-shadow:inset 0 0 0 1.5px var(--bosque)}
-.btn:focus-visible,.day:focus-visible,.slot:focus-visible,.nav:focus-visible,input:focus-visible{outline:3px solid var(--rosa);outline-offset:3px}
-
-.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.cal-head h3{font-family:var(--serif);font-size:1.4rem;color:var(--bosque);font-weight:600}
-.cal-head h3::first-letter{text-transform:uppercase}
-.nav{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--rosa-claro);background:#fff;cursor:pointer;font-size:1.1rem;color:var(--bosque);transition:.2s}
-@media (hover:hover) and (pointer:fine){.nav:hover:not(:disabled){background:var(--rosa);border-color:var(--rosa);color:#fff}}
-.nav:disabled{opacity:.35;cursor:not-allowed}
-.dow,.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
-.dow span{text-align:center;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--rosa);font-weight:700;padding-bottom:6px}
-.day{position:relative;aspect-ratio:1;border-radius:50%;border:0;background:transparent;cursor:pointer;font-weight:600;font-size:.95rem;color:#a89a93;display:grid;place-items:center;transition:transform .16s var(--ease),background .2s}
-.day.blank{visibility:hidden}
-.day:disabled{cursor:default;color:#c9bdb6;font-weight:400}
-.day.libre{color:var(--bosque);background:#fff;box-shadow:0 0 0 1.5px var(--rosa-claro) inset}
-.day.libre::after{content:"✦";position:absolute;top:3px;right:6px;font-size:.5rem;color:var(--rosa);animation:tw 3.2s ease-in-out infinite}
-@keyframes tw{0%,100%{opacity:.3}50%{opacity:1}}
-@media (hover:hover) and (pointer:fine){.day.libre:hover{transform:scale(1.1);background:var(--rosa-pale);box-shadow:0 0 0 2px var(--rosa) inset}}
-.day.hoy{text-decoration:underline;text-decoration-color:var(--rosa);text-underline-offset:4px}
-.day.sel{background:var(--rosa);color:#fff;box-shadow:0 8px 18px -6px var(--rosa);transform:scale(1.08)}
-.day.sel::after{color:#fff}
-.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:.76rem;color:#6d5f58}
-.legend i{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
-.resumen-mini{font-size:.86rem;background:#fff;border-radius:14px;padding:10px 14px;margin-bottom:14px;border:1px dashed var(--rosa-claro);line-height:1.5}
-.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;min-height:52px}
-.slot{padding:12px 4px;border-radius:14px;border:1.5px solid var(--rosa-claro);background:#fff;cursor:pointer;font-weight:600;transition:.2s}
-@media (hover:hover) and (pointer:fine){.slot:hover{border-color:var(--rosa);background:var(--rosa-pale)}}
-.slot.sel{background:var(--bosque);border-color:var(--bosque);color:#fff}
-.empty{grid-column:1/-1;text-align:center;color:#7a6b64;font-size:.9rem;padding:12px 6px}
-.atras{background:none;border:0;color:var(--bosque);cursor:pointer;text-decoration:underline;margin-top:12px;font-size:.9rem;display:block}
-
-.ticket{background:#fff;border:1.5px dashed var(--rosa);border-radius:18px;padding:14px 18px;margin:0 0 16px}
-.ticket div{display:flex;justify-content:space-between;gap:16px;padding:7px 0;border-bottom:1px dotted var(--rosa-claro);font-size:.93rem}
-.ticket div:last-child{border:0}
-.ticket dt{color:#7a6b64}
-.ticket dd{font-weight:600;text-align:right}
-.ticket dd::first-letter{text-transform:uppercase}
-.ticket .total dd{color:var(--rosa);font-family:var(--serif);font-size:1.25rem}
-.pasos{list-style:none;padding:0;counter-reset:s;margin:14px 0}
-.pasos li{counter-increment:s;position:relative;padding:0 0 12px 42px;line-height:1.45;font-size:.93rem}
-.pasos li::before{content:counter(s);position:absolute;left:0;top:-2px;width:30px;height:30px;border-radius:50%;background:var(--bosque);color:var(--rosa-claro);display:grid;place-items:center;font-family:var(--serif);font-weight:700}
-.alias{display:flex;align-items:center;gap:10px;background:var(--rosa-pale);border-radius:14px;padding:10px 12px;margin-top:8px;flex-wrap:wrap}
-.alias code{font-weight:700;word-break:break-all;color:var(--bosque)}
-.copy{margin-left:auto;border:0;border-radius:99px;background:var(--bosque);color:#fff;padding:8px 14px;cursor:pointer;font-weight:600;font-size:.82rem}
-.nota{font-size:.8rem;color:#6d5f58;line-height:1.5;margin-top:12px;text-align:center}
-.fin-actions{display:grid;gap:10px}
-.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,30px);background:var(--bosque-hondo);color:#fff;padding:12px 18px;border-radius:99px;opacity:0;pointer-events:none;transition:.3s;z-index:40;font-size:.9rem}
-.toast.on{opacity:1;transform:translate(-50%,0)}
-
-/* versión estática (sin GSAP o con movimiento reducido) */
-.static #journey{height:auto}
-.static .stage{position:relative;height:auto;min-height:100svh;overflow:visible;padding:90px 16px 40px}
-.static .plates{position:fixed}
-.static .plate:first-child{opacity:1}
-.static #door,.static #door-bg,.static .hint,.static .say,.static .islands{display:none}
-.static .fairy{position:relative;left:auto;bottom:auto;height:50svh;margin:0 auto 20px;opacity:1}
-.static .hero-copy{position:relative;top:auto;opacity:1;margin-bottom:24px}
-.static .panel{position:relative;opacity:1;pointer-events:auto;transform:none;right:auto;top:auto;width:auto;max-width:620px;margin:0 auto 20px;max-height:none}
-.static .bar{position:fixed;opacity:1}
-@media (prefers-reduced-motion:reduce){.fireflies,.petals{display:none}.fairy .body{animation:none}}
-
-/* ===== v6: marco mágico de renders 3D ===== */
-.panel{overflow:visible;max-height:none;padding:0}
-.panel::before{content:"";position:absolute;inset:-40px -30px;z-index:-1;border-radius:60px;pointer-events:none;
-  background:radial-gradient(closest-side,rgba(255,120,175,.30),rgba(255,120,175,0))}
-.panel-in{max-height:calc(100svh - 96px);overflow:auto;padding:26px 8px 52px;scrollbar-width:thin;scrollbar-color:var(--rosa) transparent;position:relative;z-index:1}
-@media(max-width:999px){.panel-in{max-height:calc(100svh - 60px - 32svh);padding-bottom:40px}}
-.card{background:linear-gradient(180deg,#fff7fa 0%,#ffe9f1 100%);
-  box-shadow:0 0 0 1.5px #f6b7cf inset,0 24px 50px -22px rgba(0,0,0,.6),0 0 46px rgba(255,120,175,.28)}
-.deco{position:absolute;z-index:3;pointer-events:none;height:auto;filter:none}
-.d-mush{left:-140px;bottom:-38px;width:min(230px,40vw);transform:rotate(-3deg)}
-.d-crys{right:-66px;top:-58px;width:min(170px,30vw);transform:rotate(4deg)}
-.d-flor{right:-56px;bottom:-44px;width:min(140px,26vw)}
-
-@media(max-width:999px){
-  .d-mush{left:-26px;bottom:-22px;width:min(120px,30vw)}
-  .d-crys{right:-18px;top:-30px;width:min(96px,24vw)}
-  .d-flor{right:-8px;bottom:-24px;width:min(86px,22vw)}
-  .d-fern{display:none}
-}
-
-/* ===== v7: datos de clienta, recordatorios y calendario ===== */
-input[type=email]:focus,input[type=date]:focus{border-color:var(--rosa);box-shadow:0 0 0 4px rgba(238,93,147,.18)}
-.field.err input[type=email],.field.err input[type=date]{border-color:#c4284f}
-.check{display:flex;gap:10px;align-items:flex-start;font-size:.86rem;line-height:1.4;color:#4a3f3a;margin:2px 0 14px;cursor:pointer}
-.check input{margin-top:3px;width:18px;height:18px;accent-color:var(--rosa);flex:none}
-.privacy{font-size:.76rem;color:#7a6b64;line-height:1.45;margin:-4px 0 14px}
-.reglas{background:#fff;border:1.5px solid var(--rosa-claro);border-radius:18px;padding:14px 16px;margin:0 0 16px;font-size:.88rem;line-height:1.45}
-.reglas h4{font-family:var(--serif);font-size:1.05rem;color:var(--bosque);margin-bottom:8px}
-.reglas .donde{margin-bottom:10px}
-.reglas .donde a{color:var(--rosa);font-weight:700;text-decoration:none}
-.reglas ul{margin:0;padding-left:18px}
-.reglas li{margin-bottom:5px}
-.reglas .pagos{margin-top:10px;padding-top:10px;border-top:1px dotted var(--rosa-claro);font-size:.84rem}
-.cal-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-@media(max-width:420px){.cal-btns{grid-template-columns:1fr}}
-.btn.sm{padding:12px 14px;font-size:.88rem}
-.cal-btns.one{grid-template-columns:1fr}
-
-/* ===== v8: borde de enredaderas, helechos y flores ===== */
-.card::before{left:-16px;right:-16px;top:-44px;height:auto;aspect-ratio:6.2/1;
-  background:url(assets/r3d-guirnalda.webp) center/100% 100% no-repeat;border-radius:0;z-index:3}
-.d-vine-l,.d-vine-r{top:36px;width:min(86px,16vw);height:auto;max-height:68%}
-.d-vine-l{left:-52px}
-.d-vine-r{right:-52px;transform:scaleX(-1)}
-.d-farn-l{left:-176px;bottom:70px;width:min(210px,34vw);transform:scaleX(-1);z-index:2}
-.d-farn-r{right:-170px;bottom:80px;width:min(200px,32vw);z-index:2}
-@media(max-width:999px){
-  .card::before{left:-8px;right:-8px;top:-30px}
-  .d-vine-l,.d-vine-r{width:46px;top:24px}
-  .d-vine-l{left:-18px}.d-vine-r{right:-18px}
-  .d-farn-l,.d-farn-r{display:none}
-}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:420px){.two{grid-template-columns:1fr;gap:0}}
-
-/* ===== v10: logo mágico, cuadros con luz y ornamentos ===== */
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-#magic{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5}
-.hero-copy{top:6svh!important}
-.logo-reveal{display:block;width:min(470px,84vw);height:auto;margin:0 auto;opacity:0;transform-origin:50% 60%;
-  filter:drop-shadow(0 0 14px rgba(255,92,160,.65)) drop-shadow(0 4px 18px rgba(0,0,0,.35));will-change:transform,opacity}
-
-.card{
-  background:
-    radial-gradient(130% 55% at 18% -5%,rgba(255,255,255,.95),rgba(255,255,255,0) 62%),
-    radial-gradient(90% 50% at 100% 100%,rgba(255,150,195,.28),rgba(255,150,195,0) 70%),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .3  0 0 0 0 .38  0 0 0 .22 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>"),
-    linear-gradient(180deg,#fffafc 0%,#ffe7f0 55%,#ffdbe8 100%);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.95),
-    inset 0 -22px 34px -20px rgba(214,86,140,.30),
-    0 0 0 1.5px rgba(246,183,207,.95),
-    0 1px 2px rgba(0,0,0,.30),
-    0 10px 18px -6px rgba(0,0,0,.40),
-    0 34px 60px -22px rgba(0,0,0,.70),
-    0 0 70px rgba(255,140,190,.30);
-}
-.card .orn{position:absolute;width:92px;height:96px;background:url(assets/orn-esquina.webp) center/contain no-repeat;
-  pointer-events:none;z-index:5;filter:drop-shadow(0 2px 2px rgba(90,50,0,.45))}
-.card .orn.tl{left:4px;top:6px}
-.card .orn.tr{right:4px;top:6px;transform:scaleX(-1)}
-.card .orn.bl{left:4px;bottom:6px;transform:scaleY(-1)}
-.card .orn.br{right:4px;bottom:6px;transform:scale(-1,-1)}
-
-/* brillo que recorre la tarjeta */
-.card .sheen{position:absolute;inset:0;border-radius:inherit;pointer-events:none;overflow:hidden;z-index:2}
-.card .sheen::after{content:"";position:absolute;top:-30%;bottom:-30%;width:38%;left:-50%;
-  background:linear-gradient(100deg,transparent,rgba(255,255,255,.26),transparent);transform:skewX(-14deg);animation:sheen 7s ease-in-out infinite}
-@keyframes sheen{0%,55%{left:-50%}100%{left:130%}}
-
-/* polvo de hadas que flota dentro del cuadro */
-.pdust{position:absolute;inset:0;pointer-events:none;overflow:hidden;border-radius:inherit;z-index:3}
-.pdust i{position:absolute;width:5px;height:5px;border-radius:50%;background:radial-gradient(circle,#fff,#ffb6d6 60%,transparent 70%);
-  box-shadow:0 0 8px 2px rgba(255,150,200,.7);opacity:0;animation:dust 6s ease-in-out infinite}
-@keyframes dust{0%{opacity:0;transform:translateY(8px) scale(.6)}30%{opacity:1}100%{opacity:0;transform:translateY(-46px) scale(1.2)}}
-
-/* sombra apoyada en el fondo */
-.panel::after{content:"";position:absolute;left:10%;right:10%;bottom:-6px;height:34px;z-index:0;pointer-events:none;
-  background:radial-gradient(closest-side,rgba(0,0,0,.5),transparent)}
-
-/* faroles colgantes */
-.lantern{position:absolute;top:-58px;width:46px;height:86px;z-index:6;pointer-events:none;transform-origin:50% 0;
-  background:url(assets/farol.svg) center/contain no-repeat;animation:swing 5s ease-in-out infinite}
-.lantern::before{content:"";position:absolute;left:50%;top:58%;width:150px;height:150px;transform:translate(-50%,-50%);
-  background:radial-gradient(closest-side,rgba(255,210,120,.65),rgba(255,180,90,.22) 55%,transparent);animation:glow 3.4s ease-in-out infinite}
-.lantern.l{left:10%}.lantern.r{right:10%;animation-delay:-2.4s}
-@keyframes swing{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
-@keyframes glow{0%,100%{opacity:.8}50%{opacity:1}}
-@media(max-width:999px){.card .orn{width:58px;height:60px}.lantern{top:-44px;width:34px;height:64px}.lantern.l{left:6%}.lantern.r{right:6%}}
-@media (prefers-reduced-motion:reduce){.lantern,.lantern::before,.card .sheen::after,.pdust i{animation:none}}
-
-/* ===== v12: todo centrado y sin pisarse en el celular ===== */
-.panel{left:0;right:0;margin-inline:auto;width:min(560px,calc(100% - 28px))}
-.panel-in{overflow-x:hidden}
-.card{max-width:100%}
-.card h2{overflow-wrap:anywhere}
-.stage{overflow:hidden}
-@media(min-width:1000px){
-  .panel{top:70px}
-  .panel-in{max-height:calc(100svh - 92px)}
-}
-@media(max-width:999px){
-  .panel{top:72px;width:calc(100% - 24px);right:0;left:0}
-  .panel-in{max-height:calc(100svh - 72px - 30svh);padding:22px 6px 34px}
-  .card{padding:46px 18px 40px;margin-bottom:14px}
-  .card .orn{width:42px;height:44px;opacity:.95}
-  .card .orn.tl,.card .orn.tr{top:4px}.card .orn.bl,.card .orn.br{bottom:4px}
-  .card::before{top:-26px;left:-6px;right:-6px}
-  .d-vine-l,.d-vine-r,.d-farn-l,.d-farn-r,.d-mush{display:none}
-  .d-flor{right:-4px;bottom:-26px;width:74px}
-  .d-crys{right:-6px;top:-34px;width:78px}
-  .lantern{top:-40px;width:32px;height:60px}
-  .lantern::before{width:110px;height:110px}
-  .kicker.dark{font-size:.7rem}
-  h2{font-size:1.35rem;line-height:1.12}
-  .card p.lead{font-size:.9rem;margin:6px 0 14px}
-  .servicios{gap:7px}
-  .serv span{padding:10px 12px}
-  .dow span{font-size:.62rem}
-  .day{font-size:.9rem}
-  .slots{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .ticket div{font-size:.88rem;gap:10px}
-  .alias code{font-size:.9rem}
-  .fin-actions .btn{padding:14px 16px;font-size:.95rem}
-  .say{font-size:.8rem;max-width:44vw}
-}
-@media(max-width:360px){
-  .card{padding:44px 14px 36px}
-  .two{grid-template-columns:1fr;gap:0}
-  .path .line{width:8px}
-}
-
-/* ===== v13: agenda más rosa, con los diseños de Chhari, sin superposiciones ===== */
-:root{--rosa-fuerte:#E8478A;--rosa-suave:#FFD6E6;--rosa-hielo:#FFF0F6}
-
-/* barra y textos sobre imagen: difuminado en vez de choque */
-.bar{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:linear-gradient(180deg,rgba(58,12,42,.62),rgba(58,12,42,0))}
-.hero-copy .sub{display:inline-block;padding:9px 16px;border-radius:16px;background:rgba(48,10,36,.34);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.hint{padding:6px 14px;border-radius:12px;background:rgba(48,10,36,.3);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);width:max-content;margin:0 auto;left:0;right:0}
-
-/* marco del cuadro: halo rosa con difuminado del fondo */
-.panel::before{inset:-34px -26px;border-radius:64px;
-  background:radial-gradient(closest-side,rgba(255,110,176,.46),rgba(255,110,176,.12) 70%,rgba(255,110,176,0));
-  backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
-.panel-in{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 calc(100% - 26px),transparent 100%);
-  mask-image:linear-gradient(to bottom,#000 0,#000 calc(100% - 26px),transparent 100%)}
-
-/* tarjetas rosas */
-.card{
-  background:
-    radial-gradient(130% 48% at 14% -8%,rgba(255,255,255,.96),rgba(255,255,255,0) 62%),
-    radial-gradient(85% 55% at 100% 100%,rgba(255,86,160,.34),rgba(255,86,160,0) 72%),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .75  0 0 0 0 .2  0 0 0 0 .45  0 0 0 .22 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>"),
-    linear-gradient(180deg,#fff1f7 0%,#ffd8e8 50%,#ffc2da 100%);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.95),
-    inset 0 -26px 38px -22px rgba(224,64,128,.40),
-    0 0 0 1.5px #f58cb8,
-    0 1px 2px rgba(60,10,40,.30),
-    0 12px 22px -8px rgba(60,10,40,.40),
-    0 36px 64px -24px rgba(60,10,40,.62),
-    0 0 84px rgba(255,92,166,.42);
-}
-.kicker.dark{color:var(--rosa-fuerte)}
-h2{color:#2c4a3a}
-em{color:var(--rosa-fuerte)}
-input[type=text],input[type=tel],input[type=email],input[type=date]{border-color:#f5a0c3;background:rgba(255,255,255,.92)}
-input:focus{border-color:var(--rosa-fuerte)!important;box-shadow:0 0 0 4px rgba(232,71,138,.2)!important}
-.serv span{border-color:#f5a0c3;background:rgba(255,255,255,.9)}
-.serv input:checked+span{border-color:var(--rosa-fuerte);background:#ffe4ef;box-shadow:0 6px 16px -8px rgba(232,71,138,.7)}
-.serv input:checked+span::before{background:var(--rosa-fuerte) radial-gradient(circle,#fff 28%,transparent 32%);border-color:var(--rosa-fuerte)}
-.btn{background:linear-gradient(180deg,#ff86b6 0%,#ee4f8f 100%);
-  box-shadow:0 12px 24px -9px rgba(224,64,128,.85),inset 0 1px 0 rgba(255,255,255,.6)}
-.btn.ghost{background:rgba(255,255,255,.55);color:#9b2a5c;box-shadow:inset 0 0 0 1.5px #ee4f8f}
-.btn.wa{background:linear-gradient(180deg,#34b36d,#1f8f55)}
-.btn:disabled{background:#e8cfd9;box-shadow:none}
-.dow span{color:var(--rosa-fuerte)}
-.day.libre{background:#fff;box-shadow:0 0 0 1.5px #f58cb8 inset}
-.day.libre:hover{background:#ffe4ef}
-.day.sel{background:linear-gradient(180deg,#ff86b6,#e8478a);box-shadow:0 10px 20px -8px rgba(224,64,128,.9)}
-.cal-head h3{color:#9b2a5c}
-.nav{border-color:#f5a0c3;color:#9b2a5c}
-.slot{border-color:#f5a0c3;background:rgba(255,255,255,.92)}
-.slot:hover{background:#ffe4ef}
-.slot.sel{background:linear-gradient(180deg,#ff86b6,#e8478a);border-color:#e8478a;color:#fff}
-.resumen-mini{background:rgba(255,255,255,.75);border-color:#f5a0c3}
-.ticket{background:rgba(255,255,255,.82);border-color:#ee4f8f}
-.ticket .total dd,.pasos li::before{color:var(--rosa-fuerte)}
-.pasos li::before{background:#9b2a5c;color:#ffe4ef}
-.alias{background:#ffe4ef}
-.copy{background:#9b2a5c}
-.reglas{background:rgba(255,255,255,.8);border-color:#f5a0c3}
-.legend i{border-radius:50%}
-.bubble{background:#ffe4ef}
-
-/* celular: sin superposiciones */
-@media(max-width:999px){
-  .panel{top:80px}
-  .panel-in{max-height:calc(100svh - 80px - 28svh)}
-  .lantern{top:-34px}
-  .say{bottom:20%;max-width:46vw;line-height:1.3}
-  .hero-copy .sub{font-size:.92rem;max-width:84vw}
-}
-@media(max-height:640px) and (max-width:999px){
-  .panel-in{max-height:calc(100svh - 80px - 28svh)}
-  .say{font-size:.76rem;padding:8px 10px}
-}
-
-/* escritorio: el globo va arriba de la cabeza de Chari (nunca sobre el cuadro) */
-@media(min-width:1000px){
-  .say{left:-6%;top:-13%;width:min(236px,26vw)}
-  .say::after{left:34px;bottom:-14px;border:8px solid transparent;border-top-color:var(--crema);border-bottom:0;border-right-color:transparent}
-}
-
-/* ===== v14: todo quieto al scrollear (nada tiembla) ===== */
-.fairy .body,.fairy .tilt{animation:none!important;transition:none!important}
-.lantern{animation:none!important;transform:none!important}
-.lantern::before{animation:none!important;opacity:.9}
-/* los desenfoques "backdrop" detrás de capas que se mueven hacen vibrar: se cambian por velos sólidos */
-.bar,.hero-copy .sub,.hint,.panel::before{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-.bar{background:linear-gradient(180deg,rgba(58,12,42,.80) 0%,rgba(58,12,42,.45) 60%,rgba(58,12,42,0) 100%)}
-.hero-copy .sub{background:rgba(48,10,36,.52)}
-.hint{background:rgba(48,10,36,.5)}
-.panel::before{background:radial-gradient(closest-side,rgba(255,110,176,.40),rgba(255,110,176,.10) 70%,rgba(255,110,176,0))}
-/* capas estables: se rasterizan una vez y solo se mueven por GPU */
-.plate,.isl,.fairy,.panel,.hero-copy,#door,#door-bg{backface-visibility:hidden;-webkit-backface-visibility:hidden;transform-style:flat}
-.fairy img,.isl img{image-rendering:auto}
-
-/* ===== v15: ningún adorno pisa los textos ===== */
-.card{padding:66px 26px 66px}
-.card::before{aspect-ratio:auto;height:56px;top:-30px;left:-8px;right:-8px;background-size:100% 100%}
-.card .orn{width:54px;height:57px}
-.card .orn.tl,.card .orn.tr{top:4px}
-.card .orn.bl,.card .orn.br{bottom:4px}
-.card .orn.tl,.card .orn.bl{left:6px}
-.card .orn.tr,.card .orn.br{right:6px}
-.card.lock{padding-top:70px}
-
-/* escritorio: los adornos grandes van afuera del cuadro y del lado donde no está Chari */
-@media(min-width:1000px){
-  .d-vine-l,.d-vine-r,.d-farn-l,.d-farn-r,.d-flor{display:none}
-  .d-mush{left:auto;right:-132px;bottom:-26px;width:156px;transform:none}
-  .d-crys{right:-100px;top:-44px;width:140px}
-}
-@media(max-width:999px){
-  .card{padding:58px 18px 56px}
-  .card .orn{width:40px;height:42px}
-  .card::before{height:44px;top:-24px}
-  .card.lock{padding-top:60px}
-}
-
-@media(max-width:999px){.panel{width:min(560px,calc(100% - 24px))}}
-
-@media(max-width:999px){.d-flor,.d-crys{display:none}}
-
-/* ===== v16: superficies marfil cálido, acentos rosa, verde bosque en títulos ===== */
-.card{
-  background:
-    radial-gradient(130% 48% at 14% -8%,rgba(255,255,255,.92),rgba(255,255,255,0) 62%),
-    radial-gradient(85% 55% at 100% 100%,rgba(244,170,200,.22),rgba(244,170,200,0) 72%),
-    linear-gradient(180deg,#fffaf0 0%,#fbf1e2 55%,#f6e8d6 100%);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.95),
-    inset 0 -24px 34px -24px rgba(196,120,140,.22),
-    0 0 0 1.5px #e7c9a4,
-    0 1px 2px rgba(60,10,40,.25),
-    0 12px 22px -8px rgba(40,24,20,.38),
-    0 36px 64px -24px rgba(40,24,20,.5),
-    0 0 70px rgba(255,150,190,.28);
-}
-.panel::before{background:radial-gradient(closest-side,rgba(255,170,205,.34),rgba(255,170,205,.08) 70%,rgba(255,170,205,0))}
-h2,h3.t,.cal-head h3{color:#2c4a3a}
-.kicker.dark{color:#2f5a43}
-input[type=text],input[type=tel],input[type=email],input[type=date]{background:#fffdf8;border-color:#e6c9b4}
-.serv span,.slot{background:#fffdf8;border-color:#e6c9b4}
-.day.libre{background:#fffdf8;box-shadow:0 0 0 1.5px #e9b3c8 inset}
-.resumen-mini,.reglas{background:rgba(255,253,248,.85);border-color:#e6c9b4}
-.ticket{background:#fffdf8}
-.shade{background:linear-gradient(180deg,rgba(30,40,28,.42) 0%,rgba(30,40,28,0) 30%,rgba(30,40,28,0) 62%,rgba(40,20,32,.5) 100%)}
-
-/* ===== modo mantenimiento (se controla con estado.json) ===== */
-#mant{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;
-  background:radial-gradient(120% 90% at 50% 0%,#ffd9e8 0%,#f6e3d3 55%,#cfe0c8 100%);text-align:center}
-#mant.on{display:flex}
-#mant .box{max-width:420px;width:100%;background:#fffaf0;border-radius:28px;padding:34px 26px;box-shadow:0 0 0 1.5px #e7c9a4,0 24px 60px -20px rgba(40,24,20,.45)}
-#mant img{width:min(240px,70%);height:auto;margin:0 auto 18px;display:block}
-#mant h1{font-family:"Bodoni Moda",serif;font-size:1.5rem;color:#2c4a3a;margin:0 0 10px;font-weight:600}
-#mant p{margin:0 0 20px;color:#4a3a36;line-height:1.5}
-#mant a{display:inline-block;padding:13px 22px;border-radius:999px;color:#fff;text-decoration:none;font-weight:600;background:linear-gradient(180deg,#ff86b6,#ee4f8f)}
-body.mant-lock{overflow:hidden}
-</style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#662646"><title>Chhari Chhula · Tu cita en el bosque</title>
+<meta name="description" content="Reservá tu turno de manicura con Chhari Chhula, el hada de las uñas. Elegí servicio, día y horario, y asegurá tu lugar con la seña.">
+<meta name="referrer" content="no-referrer">
+<link rel="preload" href="assets/Manrope.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="assets/Lora.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="reserva.css">
+<script defer src="vendor/gsap.min.js"></script><script defer src="vendor/ScrollTrigger.min.js"></script>
+<script defer src="config.js"></script><script defer src="chari.js"></script><script defer src="motion.js"></script><script defer src="api.js"></script><script defer src="booking.js"></script><script defer src="gestion.js"></script>
 </head>
 <body>
-<div id="mant" role="alertdialog" aria-modal="true" aria-labelledby="mant-t">
-  <div class="box">
-    <img src="assets/logo-chhari.webp" alt="Chhari Chhula, el hada de las uñas">
-    <h1 id="mant-t">Volvemos muy pronto</h1>
-    <p id="mant-msg">Estamos preparando algo mágico en el bosque.</p>
-    <a id="mant-wa" href="#" rel="noopener">Escribinos por WhatsApp</a>
-  </div>
+<a class="skip" href="#reserva">Ir a reservar</a>
+<div id="mant" role="alertdialog" aria-modal="true" aria-labelledby="mant-t" hidden>
+<div class="box"><img src="assets/wordmark-rosa.webp" alt="Chhari Chhula, el hada de las uñas"><h1 id="mant-t">Volvemos muy pronto</h1><p id="mant-msg">Estamos preparando algo mágico en el bosque.</p><a id="mant-wa" href="#" rel="noopener">Escribinos por WhatsApp</a></div>
 </div>
 <script>
-/* Modo mantenimiento: editá estado.json ("mantenimiento": true/false). ?preview entra igual; ?mantenimiento lo fuerza para probar */
+/* Modo mantenimiento: estado.json ("mantenimiento": true/false). ?preview entra igual; ?mantenimiento lo muestra para probar. */
 (function(){
   var q=location.search;
   function on(msg){
     var el=document.getElementById("mant"); if(!el) return;
     if(msg) document.getElementById("mant-msg").textContent=msg;
     document.getElementById("mant-wa").href="https://wa.me/5493517593713";
-    el.classList.add("on"); document.body.classList.add("mant-lock");
+    el.hidden=false; document.body.classList.add("mant-lock");
   }
   if(q.indexOf("preview")>-1) return;
   if(q.indexOf("mantenimiento")>-1){ on(); return; }
@@ -530,888 +33,127 @@ body.mant-lock{overflow:hidden}
     .then(function(j){ if(j && j.mantenimiento===true) on(j.mensaje); }).catch(function(){});
 })();
 </script>
-
-<div id="journey">
- <div class="stage" id="stage">
-  <div class="plates" id="plates" aria-hidden="true">
-    <div class="plate" style="background-image:url(assets/vid/p-tunel-solo.jpg)"></div>
-    <div class="plate" style="background-image:url(assets/vid/p-cristal-solo.jpg)"></div>
-    <div class="plate" style="background-image:url(assets/vid/p-tienda-solo.jpg)"></div>
-    <div class="plate" style="background-image:url(assets/vid/p-tronco-solo.jpg)"></div>
-  </div>
-  <canvas id="door-bg" aria-hidden="true"></canvas>
-  <canvas id="door" aria-hidden="true"></canvas>
-  <div class="shade" aria-hidden="true"></div>
-  <div class="shade2" id="shade2" aria-hidden="true"></div>
-  <div class="islands" id="islands" aria-hidden="true"></div>
-  <div class="fireflies" id="fireflies" aria-hidden="true"></div>
-  <div class="petals" id="petals" aria-hidden="true"></div>
-
-  <header class="bar" id="bar">
-    <img src="assets/wordmark-claro.webp" alt="Chhari Chhula, el hada de las uñas">
-    <nav class="path" aria-label="Pasos de la reserva">
-      <div class="p on" data-p="1"><b>1</b><span>Tus datos</span></div><div class="line"></div>
-      <div class="p" data-p="2"><b>2</b><span>Tu día</span></div><div class="line"></div>
-      <div class="p" data-p="3"><b>3</b><span>Tu seña</span></div>
-    </nav>
-  </header>
-
-  <div class="hero-copy" id="hero-copy">
-    <h1 class="sr">Chhari Chhula, hada de las uñas</h1>
-    <img class="logo-reveal" id="logo" src="assets/logo-chhari.webp" alt="Chhari Chhula">
-    <p class="sub">Manicura hecha a mano, entre plantas, cristales y destellos.</p>
-  </div>
-  <canvas id="magic" aria-hidden="true"></canvas>
-  <div class="hint" id="hint">Deslizá para abrir la puerta</div>
-
-  <!-- Chari, la guía -->
-  <div class="fairy" id="fairy">
-    <div class="tilt" id="tilt"><canvas id="fairy-gl" aria-hidden="true"></canvas><div class="body"><img id="fairy-img" src="assets/chari-3d.png" alt="Chari, el hada de las uñas"></div></div>
-    <span class="shadow"></span>
-    <div class="say" id="say" role="status" aria-live="polite"></div>
-  </div>
-
-  <!-- PASO 1 -->
-  <section class="panel" id="p-datos" aria-labelledby="t1">
-    <div class="panel-in">
-    <div class="card">
-      <p class="kicker dark">Paso 1</p>
-      <h2 id="t1">Contale al hada <em>quién sos</em></h2>
-      <p class="lead">Tu nombre, qué servicio querés y tu WhatsApp. Después te llevo a elegir tu día.</p>
-      <form id="form" novalidate>
-        <div class="two">
-          <div class="field" id="f-nombre">
-            <label for="nombre">Tu nombre</label>
-            <input id="nombre" type="text" autocomplete="given-name" placeholder="Nombre" maxlength="40">
-            <p class="msg">Decime tu nombre.</p>
-          </div>
-          <div class="field" id="f-apellido">
-            <label for="apellido">Tu apellido</label>
-            <input id="apellido" type="text" autocomplete="family-name" placeholder="Apellido" maxlength="40">
-            <p class="msg">Decime tu apellido.</p>
-          </div>
-        </div>
-        <div class="field" id="f-servicio">
-          <span class="lbl" id="lbl-serv">Servicio</span>
-          <p class="privacy" style="margin:0 0 10px">Todos los servicios de manicura incluyen 4 uñas con brillo o nail art simple y 6 con color liso (a elección).</p>
-          <div class="servicios" id="servicios" role="radiogroup" aria-labelledby="lbl-serv"></div>
-          <p class="msg">Elegí un servicio.</p>
-        </div>
-        <div class="field" id="f-tel">
-          <label for="tel">Tu WhatsApp</label>
-          <input id="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="Ej: 351 555 1234" maxlength="20">
-          <p class="msg">Poné un número válido con característica (sin 0 ni 15).</p>
-        </div>
-        <div class="field" id="f-mail">
-          <label for="mail">Tu email</label>
-          <input id="mail" type="email" inputmode="email" autocomplete="email" placeholder="para tus avisos y novedades" maxlength="80">
-          <p class="msg">Poné un email válido, por ejemplo nombre@correo.com.</p>
-        </div>
-        <div class="field" id="f-cumple">
-          <label for="cumple">Tu fecha de cumpleaños</label>
-          <input id="cumple" type="date" autocomplete="bday" min="1930-01-01">
-          <p class="msg">Elegí tu fecha de cumpleaños para que Chari te prepare un regalito.</p>
-        </div>
-        <label class="check"><input type="checkbox" id="consent"><span>Quiero recibir novedades, alertas y regalitos de Chari (cumpleaños, gift cards y más).</span></label>
-        <p class="privacy">Tus datos se usan para gestionar tu turno y, si lo aceptás, para novedades y regalos de Chari.</p>
-        <button class="btn wide" type="submit">Seguir el sendero ✦</button>
-      </form>
-    </div>
-  </div>
-    <img class="deco d-farn-l" src="assets/r3d-helecho-arco.webp" alt="">
-    <img class="deco d-farn-r" src="assets/r3d-helecho-arco.webp" alt="">
-    <img class="deco d-vine-l" src="assets/r3d-enredadera.webp" alt="">
-    <img class="deco d-vine-r" src="assets/r3d-enredadera.webp" alt="">
-    <img class="deco d-crys" src="assets/r3d-cristales.webp" alt="">
-    <img class="deco d-flor" src="assets/r3d-flores.webp" alt="">
-    <img class="deco d-mush" src="assets/r3d-hongos.webp" alt="">
-  </section>
-
-  <!-- PASO 2 -->
-  <section class="panel" id="p-cal" aria-labelledby="t2">
-    <div class="panel-in">
-    <div class="card lock" id="lock-cal"><p>Primero contale al hada quién sos y qué servicio querés.</p><button class="btn" data-goto="datos">Volver a mis datos</button></div>
-    <div id="cal-content" hidden>
-      <div class="card">
-        <p class="kicker dark">Paso 2</p>
-        <h2 id="t2">Elegí cuándo te <em>espero</em></h2>
-        <div class="cal-head" style="margin-top:14px">
-          <button class="nav" id="prev" aria-label="Mes anterior">‹</button>
-          <h3 id="mes"></h3>
-          <button class="nav" id="next" aria-label="Mes siguiente">›</button>
-        </div>
-        <div class="dow" aria-hidden="true"><span>Lu</span><span>Ma</span><span>Mi</span><span>Ju</span><span>Vi</span><span>Sa</span><span>Do</span></div>
-        <div class="days" id="days" role="grid" aria-label="Días disponibles"></div>
-        <div class="legend">
-          <span><i style="background:#fff;box-shadow:0 0 0 1.5px var(--rosa-claro) inset"></i>Con lugar</span>
-          <span><i style="background:var(--rosa)"></i>Tu elección</span>
-          <span><i style="background:#e7ddd6"></i>Sin lugar</span>
-        </div>
-      </div>
-      <div class="card">
-        <div class="resumen-mini" id="mini"></div>
-        <div class="slots" id="slots" aria-live="polite"></div>
-        <button class="btn wide" id="to3" disabled>Reservar este turno</button>
-        <button class="atras" id="back1">‹ Cambiar mis datos</button>
-      </div>
-    </div>
-  </div>
-    <img class="deco d-farn-l" src="assets/r3d-helecho-arco.webp" alt="">
-    <img class="deco d-farn-r" src="assets/r3d-helecho-arco.webp" alt="">
-    <img class="deco d-vine-l" src="assets/r3d-enredadera.webp" alt="">
-    <img class="deco d-vine-r" src="assets/r3d-enredadera.webp" alt="">
-    <img class="deco d-crys" src="assets/r3d-cristales.webp" alt="">
-    <img class="deco d-flor" src="assets/r3d-flores.webp" alt="">
-    <img class="deco d-mush" src="assets/r3d-hongos.webp" alt="">
-  </section>
-
-  <!-- PASO 3 -->
-  <section class="panel" id="p-sena" aria-labelledby="t3">
-    <div class="panel-in">
-    <div class="card lock" id="lock-sena"><p>Elegí tu día y horario para guardarte el lugar.</p><button class="btn" data-goto="cal">Elegir mi día</button></div>
-    <div id="sena-content" hidden>
-      <div class="card">
-        <p class="kicker dark">Paso 3</p>
-        <h2 id="t3">Tu lugar está guardado… <em>falta la seña</em></h2>
-        <p class="lead">El turno se confirma cuando se acredita la seña. Después Chari te escribe por WhatsApp para dejarlo cerrado.</p>
-        <dl class="ticket" id="ticket"></dl>
-        <div class="reglas" id="reglas"></div>
-        <div class="cal-btns one">
-          <a class="btn ghost wide" id="gcal" href="#" target="_blank" rel="noopener">📅 Agregar a Google Calendar</a>
-        </div>
-        <ol class="pasos">
-          <li><strong>Transferí la seña de <span id="sena"></span></strong>
-            <div class="alias"><code id="alias"></code><button class="copy" id="copy" type="button">Copiar</button></div>
-            <small id="titular" style="display:block;margin-top:6px;color:#6d5f58"></small>
-          </li>
-          <li><strong>Mandale el comprobante a Chari</strong> por WhatsApp con el botón de abajo (ya va con tus datos).</li>
-          <li><strong>Chari te confirma el turno</strong> por el mismo chat y listo, ¡nos vemos en el bosque!</li>
-        </ol>
-        <div class="fin-actions">
-          <a class="btn wa wide" id="wa" href="#" target="_blank" rel="noopener">Ya hice la seña · Avisar a Chari</a>
-          <a class="btn ghost wide" id="pagolink" href="#" target="_blank" rel="noopener" hidden>Pagar la seña online</a>
-          <button class="btn ghost wide" id="otro" type="button">Elegir otro día</button>
-        </div>
-        <p class="nota">Tu horario queda reservado para vos mientras Chari espera la seña. Si pasa mucho tiempo sin avisar, el lugar puede liberarse.</p>
-      </div>
-    </div>
-  </div>
-    <img class="deco d-farn-l" src="assets/r3d-helecho-arco.webp" alt="">
-    <img class="deco d-farn-r" src="assets/r3d-helecho-arco.webp" alt="">
-    <img class="deco d-vine-l" src="assets/r3d-enredadera.webp" alt="">
-    <img class="deco d-vine-r" src="assets/r3d-enredadera.webp" alt="">
-    <img class="deco d-crys" src="assets/r3d-cristales.webp" alt="">
-    <img class="deco d-flor" src="assets/r3d-flores.webp" alt="">
-    <img class="deco d-mush" src="assets/r3d-hongos.webp" alt="">
-  </section>
- </div>
+<header class="masthead">
+<a class="brand" href="#inicio" aria-label="Chhari Chhula, inicio"><img src="assets/wordmark-claro.webp" alt="Chhari Chhula, el hada de las uñas"></a>
+<a class="reserve-link" href="#reserva">Reservar mi cita <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a>
+</header>
+<main>
+<section class="journey" id="inicio" aria-label="El sendero del bosque de Chhari Chhula">
+<div class="stage">
+<div class="scene-media" aria-hidden="true">
+<img class="scene-image" id="end-still" src="assets/salon-interior-final.webp" alt="">
+<img class="scene-image" id="exterior-still" src="assets/salon-exterior-inicio.webp" alt="">
+<img class="scene-image" id="open-still" src="assets/puerta-final.webp" alt="">
+<img class="scene-image" id="start-still" src="assets/recorrido-inicio.webp" alt="">
+<canvas id="journey-canvas" class="scene-video" aria-hidden="true"></canvas>
 </div>
-<div class="toast" id="toast" role="status"></div>
+<div class="chari-flight" aria-hidden="true"><div class="chari-float"><img class="chari-original" src="assets/chari-vuelo.webp" alt="" width="534" height="800" decoding="async"><div class="chari-wing-plane"><img class="chari-wing wing-left" src="assets/chari-alas-v2.webp" alt="" width="534" height="800"><img class="chari-wing wing-right" src="assets/chari-alas-v2.webp" alt="" width="534" height="800"></div><img class="chari-body" src="assets/chari-cuerpo-v2.webp" alt="" width="534" height="800"></div></div>
+<div class="scene-shade" aria-hidden="true"></div>
+<div class="welcome scene-copy">
+<h1>El bosque de Chhari<br>te abre sus puertas.</h1><p>Seguí el sendero.<br>Tu próximo ritual empieza acá.</p>
+<button class="pink-button enter" type="button">Entrar al bosque <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></button>
+</div>
+<div class="arrival scene-copy" aria-hidden="true">
+<h2>Tu próximo ritual<br>empieza acá.</h2><p>Un espacio para vos, en el corazón del bosque.</p>
+<a class="pink-button" href="#reserva" tabindex="-1">Reservar mi cita <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a>
+</div>
+<p class="scroll-note" id="scene-caption">Seguí el sendero</p><p class="media-status" id="media-status" role="status"></p>
+</div>
+</section>
+<section class="reservation" id="reserva" tabindex="-1" aria-labelledby="reservation-title">
+<div class="reservation-backdrop" aria-hidden="true"></div>
+<div class="booking-layout">
+<div class="booking-intro">
+<img class="booking-wordmark" src="assets/wordmark-claro.webp" alt="Chhari Chhula, el hada de las uñas" loading="lazy">
+<h2 id="reservation-title">Tu ritual,<br>tu momento.</h2><p>Elegí tu servicio y encontrá<br>tu lugar en el bosque.</p>
+<div class="chari-host"><p id="chari-message">Te acompaño hasta tu próxima cita.</p></div>
+<button type="button" class="back-to-garden">Volver al bosque <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V4m-6 6 6-6 6 6"/></svg></button>
+</div>
+<div class="booking-area">
+<nav class="booking-steps" id="booking-steps" aria-label="Pasos de tu cita">
+<button type="button" data-step="1" aria-current="step"><span>1</span>Tus datos</button><span class="step-line" aria-hidden="true"></span>
+<button type="button" data-step="2"><span>2</span>Tu día</button><span class="step-line" aria-hidden="true"></span>
+<button type="button" data-step="3"><span>3</span>Tu seña</button>
+</nav>
+<div class="magic-frame">
+<div class="chari-dock"><img id="chari-host-image" src="assets/chari-guia.webp" alt="Chari, tu hada guía" width="534" height="800" loading="lazy"></div>
+<div class="frame-decoration" aria-hidden="true"><img class="floral-ornament floral-tl" src="assets/adorno-floral-completo.webp" width="480" height="480" alt="" loading="lazy"><img class="floral-ornament floral-tr" src="assets/adorno-floral-completo.webp" width="480" height="480" alt="" loading="lazy"><img class="floral-ornament floral-bl" src="assets/adorno-floral-completo.webp" width="480" height="480" alt="" loading="lazy"><img class="floral-ornament floral-br" src="assets/adorno-floral-completo.webp" width="480" height="480" alt="" loading="lazy"></div>
 
-<script src="assets/vendor/gsap.min.js"></script>
-<script src="assets/vendor/ScrollTrigger.min.js"></script>
-<script src="assets/vendor/three.min.js"></script>
-<script>
-/* =========================================================
-   CONFIGURACIÓN — Chari edita solo esta parte
-   ========================================================= */
-const CONFIG = {
-  whatsapp: "5493517593713",
-  sena: 10000,
-  pago: { alias: "virgo.30", titular: "Carolina Micaela Marengo", link: "" },
-  salon: {
-    direccion: "LAS PLAYAS 1717",
-    barrio: "VILLA CABRERA",
-    mapa: "https://www.google.com/maps/search/?api=1&query=Las+Playas+1717+Villa+Cabrera+C%C3%B3rdoba",
-    instagram: "@Chharichhula"
-  },
-  duracionMin: 120,          // duración del turno en el calendario del celular
-  endpoint: "https://script.google.com/macros/s/AKfycbxEvl6oq2AsbyAQpu0DCgHqF6vUpP-PPVDQMOvUibXmo1Tctjl7YSzhQXNFZTivDXGcHA/exec",              // URL del Apps Script que guarda la base de clientas (ver apps-script/Code.gs)
-  // Texto de Chari, tal cual lo envía al confirmar el turno
-  reglas: [
-    "Ser puntuales a su cita pactada.(tolerancia 15’)",
-    "Asistir con sus uñas limpias y cepilladas sin resto de comida o suciedad por debajo y por arriba de sus uñas.",
-    "No aplicarse cremas en las manos antes de la Cita.",
-    "No asistir con esmaltes tradicionales.",
-    "Avisar previamente, si vienen con un servicio echo en otro salón.",
-    "Asistir a su cita sin ACOMPAÑANTES",
-    "SALON NO APTO PARA RECIBIR NIÑES 🙏🏻 (Porfavorrrr NO ME COMPROMETA)"
-  ],
-  // Servicios principales, según los flyers de Chari
-  servicios: [
-    { id: "semi",     nombre: "Esmaltado semipermanente", min: 90,  valor: "$20.000",         nota: "1:30 hs · $20.000" },
-    { id: "capnivel", nombre: "Capping nivelador",        min: 120, valor: "$25.000",         nota: "2:00 hs · $25.000" },
-    { id: "cappoly",  nombre: "Capping Poligel",          min: 150, valor: "$30.000",         nota: "2:30 hs · $30.000" },
-    { id: "soft",     nombre: "Soft Gel",                 min: 180, valor: "desde $35.000",   nota: "3:00 hs · desde $35.000" },
-    { id: "rusa",     nombre: "Manicura rusa",            min: 60,  valor: "$18.000",         nota: "1:00 hs · $18.000" }
-  ],
-  // Horarios del salón: lunes a viernes de 09:00 a 18:00, sábados de 10:00 a 17:00, domingos cerrado.
-  // "horarios" son las horas de inicio posibles; "cierre" es la hora en que debe terminar el turno.
-  horarios: {
-    0: [],
-    1: ["09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"],
-    2: ["09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"],
-    3: ["09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"],
-    4: ["09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"],
-    5: ["09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00"],
-    6: ["10:00","11:00","12:00","13:00","14:00","15:00","16:00"]
-  },
-  cierre: { 0:null, 1:"18:00", 2:"18:00", 3:"18:00", 4:"18:00", 5:"18:00", 6:"17:00" },
-  bloqueDefault: 120,        // minutos que bloquea un turno cargado a mano en "ocupados" si no indicás otro
-  // Políticas de los flyers de Chari
-  reserva: [
-    "Los turnos se reservan con una seña de $10.000. SIN SEÑA EL TURNO NO QUEDA CONFIRMADO.",
-    "La seña se descuenta del valor total de los servicios realizados.",
-    "La seña NO TIENE DEVOLUCION, Si no llegas a la cita se pierde.",
-    "La seña se mantiene con el previo aviso de 24hs antes de la cita pactada, y reprogramando una cita nueva, organizada a los tiempos disponibles de la agenda.",
-    "Los pagos se abonan antes de retirarse del Salón",
-    "NO TRABAJO CON SALDOS PENDIENTES."
-  ],
-  tenerEnCuenta: [
-    "Enviar una foto del estado actual de como vienen tus uñas.",
-    "Enviar una foto de referencia del diseño que vamos a realizar. Ya que hay diseños que requieren más tiempo y esto me permite organizar la agenda con precisión para vos y mi próxima clienta."
-  ],
-  mesesAdelante: 2,
-  anticipacionHoras: 12,
-  ocupados: {
-    // "2026-10-20": ["14:00", {h:"16:00", min:180}],   // hora de inicio (y duración opcional en minutos)
-    // "2026-10-23": "todo"
-  }
-};
-/* ========================================================= */
-const $ = s => document.querySelector(s);
-const $$ = s => [...document.querySelectorAll(s)];
-const pesos = n => "$" + n.toLocaleString("es-AR");
-const pad = n => String(n).padStart(2,"0");
-const key = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const clamp = (x,a=0,b=1) => Math.max(a,Math.min(b,x));
-const ss = (a,b,x) => { x = clamp((x-a)/(b-a)); return x*x*(3-2*x); };
-const lerp = (a,b,t) => a+(b-a)*t;
-const rngf = seed => () => (seed = (seed*1664525+1013904223)>>>0) / 4294967296;
-const hasGsap = typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined";
-const animate = hasGsap && !reduce;
-if(!animate) document.documentElement.classList.add("static");
+<div class="booking-panel" id="step-1">
+<h3 tabindex="-1">Prepará tu próxima visita</h3><p class="panel-lead">Tus datos y el servicio que te gustaría hacerte.</p>
+<p class="credit-banner" id="credit-banner" role="status" hidden></p>
+<form id="booking-form" novalidate>
+<div class="two-fields">
+<label>Tu nombre<input id="nombre" name="nombre" autocomplete="given-name" maxlength="40" placeholder="Nombre" required></label>
+<label>Tu apellido<input id="apellido" name="apellido" autocomplete="family-name" maxlength="40" placeholder="Apellido" required></label>
+</div>
+<fieldset class="service-fieldset"><legend>Elegí tu servicio</legend>
+<p class="form-note">Todos los servicios de manicura incluyen 4 uñas con brillo o nail art simple y 6 con color liso (a elección).</p>
+<div id="services" class="services"></div></fieldset>
+<label>Tu WhatsApp<input id="tel" name="tel" type="tel" autocomplete="tel" inputmode="tel" placeholder="Característica y número, sin 0 ni 15" maxlength="20" required></label>
+<div class="two-fields">
+<label>Tu email<input id="email" name="email" type="email" autocomplete="email" placeholder="nombre@correo.com" maxlength="80" required></label>
+<label>Tu cumpleaños<input id="cumple" name="cumple" type="date" autocomplete="bday" min="1930-01-01" required></label>
+</div>
+<label class="consent"><input id="consent" type="checkbox"><span>Quiero recibir novedades, alertas y regalos de Chari (cumpleaños, gift cards y más).</span></label>
+<p class="form-note">Usamos tus datos para gestionar tu turno y, si lo aceptás, para novedades y regalos de Chari.</p>
+<p id="form-error" class="form-error" role="alert" hidden></p>
+<button type="submit" class="pink-button wide">Elegir mi día <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button>
+</form>
+</div>
 
-/* ---------- ambiente ---------- */
-(function(){
-  const f=$("#fireflies");
-  for(let i=0;i<10;i++){const e=document.createElement("i");
-    e.style.cssText=`left:${Math.random()*100}%;top:${25+Math.random()*75}%;animation-delay:${Math.random()*9}s;animation-duration:${7+Math.random()*6}s`;f.appendChild(e)}
-  const p=$("#petals"),cols=["#F0789B","#F8D5E1","#EE5D93","#FCE8EF"];
-  for(let i=0;i<8;i++){const e=document.createElement("i");
-    e.style.cssText=`left:${Math.random()*100}%;background:${cols[i%4]};animation-duration:${14+Math.random()*14}s;animation-delay:${-Math.random()*20}s;--dx:${(Math.random()-.5)*160}px;--rot:${360+Math.random()*360}deg`;p.appendChild(e)}
-})();
+<div class="booking-panel" id="step-2" hidden>
+<h3 tabindex="-1">Elegí tu día y horario</h3><p class="panel-lead" id="service-summary">Elegí el día y el horario de tu cita.</p>
+<div class="calendar-head">
+<button type="button" id="prev-month" aria-label="Mes anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
+<h4 id="month-label" aria-live="polite"></h4>
+<button type="button" id="next-month" aria-label="Mes siguiente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
+</div>
+<div class="calendar-week" aria-hidden="true"><span>Lu</span><span>Ma</span><span>Mi</span><span>Ju</span><span>Vi</span><span>Sa</span><span>Do</span></div>
+<div id="calendar-days" class="calendar-days" role="group" aria-label="Días con lugar disponible"></div>
+<p id="calendar-status" class="calendar-status" role="status"></p>
+<div class="calendar-legend"><span><i></i>Con lugar</span><span><i></i>Tu elección</span></div>
+<div class="time-area"><h4 id="date-label">Elegí un día para ver los horarios</h4><div id="times" class="times"></div></div>
+<button type="button" id="review-booking" class="pink-button wide" disabled>Revisar mi cita <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button>
+<button type="button" class="text-button" data-step="1">Cambiar mis datos</button>
+</div>
 
-/* ---------- islas reales que pasan junto al sendero ---------- */
-const ISL = [
-  {src:"isla-flores",        w:"min(34vw,300px)", x:"-6%", side:"l", a:.34,b:.50, y0:30, y1:-6},
-  {src:"isla-coral",         w:"min(30vw,260px)", x:"-4%", side:"r", a:.38,b:.56, y0:50, y1:6},
-  {src:"isla-aro",           w:"min(32vw,280px)", x:"-5%", side:"l", a:.52,b:.70, y0:44, y1:2},
-  {src:"isla-cristal-negro", w:"min(22vw,170px)", x:"2%",  side:"r", a:.60,b:.78, y0:56, y1:14},
-  {src:"isla-hongos-otono",  w:"min(22vw,160px)", x:"6%",  side:"l", a:.72,b:.90, y0:60, y1:18},
-  {src:"isla-cuenco",        w:"min(30vw,240px)", x:"-5%", side:"r", a:.80,b:.98, y0:50, y1:10}
-];
-const islEls = ISL.map(o=>{
-  const d=document.createElement("div"); d.className="isl";
-  d.style.width=o.w; d.style[o.side==="l"?"left":"right"]=o.x;
-  d.innerHTML=`<img src="assets/real/${o.src}.webp" alt="" loading="lazy">`;
-  $("#islands").appendChild(d); return d;
-});
+<div class="booking-panel" id="step-3" hidden>
+<h3 tabindex="-1">Tu cita, a un paso</h3><p class="panel-lead">Revisá los detalles y elegí cómo pagar la seña. Tu lugar se guarda al continuar.</p>
+<dl class="booking-ticket" id="booking-ticket"></dl>
+<div class="deposit-note"><strong>La seña confirma tu turno</strong><p>Se descuenta del valor del servicio. El turno queda confirmado cuando la seña figura acreditada.</p></div>
+<p class="credit-banner" id="credit-applied" role="status" hidden></p>
+<fieldset class="payment-methods" id="payment-methods"><legend>Cómo querés pagar la seña</legend>
+<label class="payment-choice"><input type="radio" name="payment-method" value="transferencia" checked><span><strong>Transferencia</strong><small>Transferís al alias de Chhari y le enviás el comprobante. Chhari confirma al verificar la acreditación.</small></span></label>
+<label class="payment-choice" id="mp-choice"><input type="radio" name="payment-method" value="mercadopago"><span><strong>Mercado Pago</strong><small id="mp-small">Pagás en Mercado Pago y volvés a tu reserva. Se confirma cuando el pago figura aprobado.</small></span></label>
+</fieldset>
+<div id="transfer-details" class="payment-detail"><h4>Transferir la seña</h4><p>Al reservar te mostramos el alias y el titular. Después de transferir, podés enviar el comprobante a Chhari por WhatsApp, como hasta ahora.</p><p class="payment-status">Tu lugar queda guardado unas horas; el turno se confirma al verificar la seña.</p></div>
+<div id="mp-details" class="payment-detail" hidden><h4>Pagar con Mercado Pago</h4><p>Continuás en Mercado Pago para pagar la seña y volvés a este sitio. Tu turno se confirma cuando el pago figura aprobado; no alcanza con volver de Mercado Pago.</p></div>
+<p id="reserve-error" class="form-error" role="alert" hidden></p>
+<button type="button" class="pink-button wide" id="reserve-button">Reservar y ver datos de transferencia <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button>
+<details class="booking-policy"><summary>Seña, cancelaciones y reprogramación</summary><ul id="policy-list"></ul></details>
+<details class="booking-policy"><summary>A tener en cuenta antes de venir</summary><div id="before-list"></div></details>
+<button type="button" class="text-button" data-step="2">Cambiar día y horario</button>
+</div>
 
-/* ---------- puerta: fotogramas del video ---------- */
-const FRAMES=82, frames=[], doorC=$("#door"), bgC=$("#door-bg");
-let curFrame=0;
-function fit(c,im,mode){
-  const small=mode==="cover";
-  const w=c.clientWidth, h=c.clientHeight, d=Math.min(devicePixelRatio||1,1.5);
-  const tw=small?Math.max(24,Math.round(w/18)):Math.round(w*d);
-  const th=small?Math.max(24,Math.round(h/18)):Math.round(h*d);
-  if(c.width!==tw||c.height!==th){c.width=tw;c.height=th}
-  const ctx=c.getContext("2d"); ctx.clearRect(0,0,c.width,c.height);
-  const r=Math.min(c.width/im.width,c.height/im.height), rc=Math.max(c.width/im.width,c.height/im.height);
-  const k=mode==="cover"?rc:(c.width/c.height<.75?rc:r);
-  const dw=im.width*k, dh=im.height*k;
-  ctx.drawImage(im,(c.width-dw)/2,(c.height-dh)/2,dw,dh);
-  if(small){ctx.fillStyle="rgba(0,0,0,.32)";ctx.fillRect(0,0,c.width,c.height)}
-}
-let lastDrawn=-1;
-function drawFrame(i){
-  const n=Math.max(0,Math.min(FRAMES-1,Math.round(i)));
-  const im=frames[n]; if(!im||!im.complete||!im.naturalWidth) return;
-  if(n===lastDrawn && doorC.width) return; lastDrawn=n;
-  fit(bgC,im,"cover"); fit(doorC,im,"contain");
-}
-for(let i=1;i<=FRAMES;i++){
-  const im=new Image(); im.src=`assets/vid/door-${String(i).padStart(3,"0")}.webp?v=17`;
-  im.onload=()=>{ if(Math.round(curFrame)===i-1||i===1){lastDrawn=-1;drawFrame(curFrame)} };
-  frames.push(im);
-}
-addEventListener("resize",()=>{lastDrawn=-1;drawFrame(curFrame)});
+<div class="booking-panel" id="step-done" hidden>
+<h3 tabindex="-1" id="done-title">Tu reserva</h3>
+<div id="done-body" aria-live="polite"></div>
+</div>
 
-
-/* ---------- estado de la reserva ---------- */
-const state={nombre:"",apellido:"",tel:"",mail:"",cumple:"",consent:false,servicio:null,mes:null,fecha:null,hora:null,sena:false};
-const plates=$$(".plate");
-const WIN=[[.34,.42,.50,.55],[.47,.53,.68,.73],[.65,.71,.84,.89],[.82,.88,1.1,1.2]];
-const fairy=$("#fairy"), say=$("#say"), bar=$("#bar"), shade2=$("#shade2");
-const PANELS=[["#p-datos",.46,.64],["#p-cal",.66,.82],["#p-sena",.84,1.01]].map(a=>({el:$(a[0]),a:a[1],b:a[2]}));
-const hc=$("#hero-copy"), hint=$("#hint");
-let VW=innerWidth, VH=innerHeight, MOB=VW<1000, FW=0;
-function measure(){ VW=innerWidth; VH=innerHeight; MOB=VW<1000; FW=fairy.offsetWidth||VH*.34; }
-addEventListener("resize",measure);
-let mx=0,my=0,smx=0,smy=0;
-addEventListener("pointermove",e=>{mx=(e.clientX/VW-.5)*2;my=(e.clientY/VH-.5)*2},{passive:true});
-const cache=new Map();
-function put(el,prop,val){ let o=cache.get(el); if(!o){o={};cache.set(el,o)} if(o[prop]===val) return; o[prop]=val; el.style[prop]=val; }
-
-function sayFor(P){
-  if(P<.28) return "";
-  if(P<.40) return "¡Pasá, pasá! Te estaba esperando ✦";
-  if(P<.47) return "Soy Chari, el hada de las uñas. Te acompaño a sacar tu turno.";
-  if(P<.65) return state.servicio ? `Perfecto, ${state.nombre.split(" ")[0]}. Seguimos el sendero.` : "Contame quién sos y qué magia querés en tus manos.";
-  if(P<.83){
-    if(!state.servicio) return "Primero necesito tus datos para guardarte un lugar.";
-    if(state.fecha&&state.hora) return `Te guardo el ${fechaLarga(state.fecha)} a las ${state.hora}. ¡Qué ganas!`;
-    if(state.fecha) return `${fechaLarga(state.fecha).replace(/^./,c=>c.toUpperCase())}: elegí tu horario.`;
-    return "Tocá un día con ✦ y elegí tu horario.";
-  }
-  return state.sena ? "Falta la seña de "+pesos(CONFIG.sena)+" y te confirmo por WhatsApp 💗" : "Elegí tu día y te guardo el lugar.";
-}
-
-/* ---------- humo mágico rosa y polvo de hadas (aparición del logo) ---------- */
-const mc=$("#magic"), mctx=mc.getContext("2d"), logo=$("#logo");
-let parts=[], mRun=false, mOn=false, mLast=0;
-const rnd=(a,b)=>a+Math.random()*(b-a);
-function mResize(){ const d=Math.min(devicePixelRatio||1,1.5); mc.width=Math.round(mc.clientWidth*d); mc.height=Math.round(mc.clientHeight*d); }
-addEventListener("resize",mResize);
-function logoCenter(){
-  const r=logo.getBoundingClientRect(), st=mc.getBoundingClientRect(), d=mc.width/Math.max(1,mc.clientWidth);
-  return {x:(r.left+r.width/2-st.left)*d, y:(r.top+r.height/2-st.top)*d, w:r.width*d, h:r.height*d, d};
-}
-function spawn(kind,n,spread){
-  const c=logoCenter(); if(!c.w) return;
-  for(let i=0;i<n;i++){
-    const ox=rnd(-.5,.5)*c.w*spread, oy=rnd(-.5,.5)*c.h*spread;
-    if(kind==="smoke") parts.push({k:"s",x:c.x+ox,y:c.y+oy,vx:rnd(-.25,.25)*c.d,vy:rnd(-.5,-.08)*c.d,r:rnd(34,86)*c.d,t:0,max:rnd(2.4,4.2),a:rnd(.07,.15),h:rnd(0,1)});
-    else parts.push({k:"d",x:c.x+ox,y:c.y+oy,vx:rnd(-.5,.5)*c.d,vy:rnd(-.9,-.1)*c.d,r:rnd(1.6,3.6)*c.d,t:0,max:rnd(1.4,3),a:1,ph:rnd(0,6.28)});
-  }
-}
-function mLoop(now){
-  if(!mRun) return;
-  const dt=Math.min(.05,(now-mLast)/1000||.016); mLast=now;
-  if(mOn){ if(Math.random()<.35) spawn("smoke",1,1.25); if(Math.random()<.6) spawn("dust",1,1.4); }
-  mctx.clearRect(0,0,mc.width,mc.height);
-  mctx.globalCompositeOperation="lighter";
-  parts=parts.filter(p=>(p.t+=dt)<p.max);
-  for(const p of parts){
-    const k=p.t/p.max;
-    p.x+=p.vx*dt*60; p.y+=p.vy*dt*60;
-    if(p.k==="s"){
-      const r=p.r*(1+k*1.1), al=p.a*Math.sin(Math.PI*k);
-      const g=mctx.createRadialGradient(p.x,p.y,0,p.x,p.y,r);
-      g.addColorStop(0,`rgba(255,${150+p.h*50|0},${200+p.h*40|0},${al})`);
-      g.addColorStop(.55,`rgba(255,110,180,${al*.45})`);
-      g.addColorStop(1,"rgba(255,90,170,0)");
-      mctx.fillStyle=g; mctx.beginPath(); mctx.arc(p.x,p.y,r,0,6.283); mctx.fill();
-    } else {
-      const tw=.55+.45*Math.sin(p.ph+p.t*14), al=Math.sin(Math.PI*k)*tw, r=p.r*(1+tw*.4);
-      const g=mctx.createRadialGradient(p.x,p.y,0,p.x,p.y,r*3.2);
-      g.addColorStop(0,`rgba(255,255,255,${al})`); g.addColorStop(.35,`rgba(255,196,225,${al*.7})`); g.addColorStop(1,"rgba(255,120,190,0)");
-      mctx.fillStyle=g; mctx.beginPath(); mctx.arc(p.x,p.y,r*3.2,0,6.283); mctx.fill();
-      mctx.strokeStyle=`rgba(255,255,255,${al*.9})`; mctx.lineWidth=Math.max(1,r*.3);
-      mctx.beginPath(); mctx.moveTo(p.x-r*3,p.y); mctx.lineTo(p.x+r*3,p.y); mctx.moveTo(p.x,p.y-r*3); mctx.lineTo(p.x,p.y+r*3); mctx.stroke();
-    }
-  }
-  if(!mOn && !parts.length){ mRun=false; mctx.clearRect(0,0,mc.width,mc.height); return; }
-  requestAnimationFrame(mLoop);
-}
-function magic(on){
-  if(on===mOn) return;
-  mOn=on;
-  if(on){
-    mResize();
-    spawn("smoke",16,1.5); spawn("dust",30,1.8);       // ráfaga inicial al entrar al bosque
-    if(!mRun){ mRun=true; mLast=performance.now(); requestAnimationFrame(mLoop); }
-  }
-}
-mResize();
-
-const wob={walk:0,enter:0,amp:0};
-let lastSay="", lastStep=0;
-function render(P){
-  /* puerta */
-  if(P<.5){ curFrame=P/.26*(FRAMES-1); drawFrame(clamp(curFrame,0,FRAMES-1)); }
-  const doorOp=1-ss(.36,.48,P);
-  put(doorC,"opacity",doorOp.toFixed(3)); put(bgC,"opacity",doorOp.toFixed(3));
-  put(doorC,"visibility",doorOp<.01?"hidden":"visible"); put(bgC,"visibility",doorOp<.01?"hidden":"visible");
-  const need=Math.max(1.35,(VW/VH)/(9/16));
-  put(doorC,"transform",`scale(${(1+(need-1)*Math.pow(ss(.16,.46,P),1.35)).toFixed(4)})`);
-  put(hint,"opacity",(1-ss(0,.04,P)).toFixed(3));
-
-  /* fondos que se atraviesan */
-  plates.forEach((el,i)=>{
-    const [a,b,c,d]=WIN[i];
-    const op=ss(a,b,P)*(1-ss(c,d,P));
-    const t=clamp((P-a)/(d-a));
-    put(el,"visibility",op<.005?"hidden":"visible");
-    put(el,"opacity",op.toFixed(3));
-    put(el,"transform",`translate3d(0,0,0) scale(${(1.03+.16*t).toFixed(4)})`);
-  });
-  put(shade2,"opacity",(.05+.26*ss(.44,.7,P)).toFixed(3));
-
-  /* islas: solo transform/opacity */
-  ISL.forEach((o,i)=>{
-    const t=clamp((P-o.a)/(o.b-o.a));
-    const op=clamp(Math.sin(Math.PI*t)*1.6);
-    const el=islEls[i];
-    put(el,"visibility",op<.01?"hidden":"visible");
-    put(el,"opacity",op.toFixed(3));
-    const y=lerp(o.y0,o.y1,t)/100*VH;
-    put(el,"transform",`translate3d(0,${y.toFixed(2)}px,0) scale(${(.55+.9*t).toFixed(4)})`);
-  });
-
-  /* hada: sale de la puerta y recorre el bosque, internándose hacia el fondo */
-  const enter=ss(.20,.30,P);
-  const out=ss(.22,.38,P);                 // de la puerta al primer plano
-  const far=ss(.42,1.0,P);                 // camina hacia el fondo del bosque
-  const hBase=Math.min(VH*.78,820);
-  const near=MOB?VH*.26:VH*.66;
-  const k=near/hBase*lerp(.34,1,out)*lerp(1,MOB?.64:.5,far);
-  const cx=lerp(VW*.5,VW*(MOB?.22:(VW<1200?.14:.17)),out);
-  const rise=lerp(.15,0,out)*VH + far*(MOB?.03:.22)*VH;
-  const walk=P*240, amp=ss(.24,.34,P);
-  const bounce=0;
-  wob.walk=walk; wob.enter=enter; wob.amp=amp;
-  put(fairy,"visibility",enter<.01?"hidden":"visible");
-  put(fairy,"opacity",enter.toFixed(3));
-  put(fairy,"transform",`translate3d(${(cx-FW/2).toFixed(2)}px,${(-rise).toFixed(2)}px,0) scale(${k.toFixed(4)})`);
-  put(say,"scale",(1/k).toFixed(3));
-  const s=sayFor(P), on=!!s&&enter>.8;
-  if(s!==lastSay){lastSay=s;say.textContent=s}
-  let hide=false;
-  if(on && MOB){
-    const act=document.querySelector(".panel.act .panel-in");
-    if(act){
-      const pr=act.getBoundingClientRect(), sr=say.getBoundingClientRect();
-      hide = sr.top < pr.bottom+4 && sr.bottom > pr.top && sr.left < pr.right && sr.right > pr.left;
-    }
-  }
-  say.classList.toggle("on",on&&!hide);
-
-  /* título de entrada */
-  const hin=ss(.28,.34,P), hout=ss(.47,.54,P);
-  put(hc,"opacity",(hin*(1-hout)).toFixed(3));
-  put(hc,"transform",`translate3d(0,${(lerp(30,0,hin)-lerp(0,30,hout)).toFixed(2)}px,0)`);
-  /* el logo aparece entre humo rosa y polvo de hadas */
-  const lg=ss(.30,.42,P);
-  put(logo,"opacity",lg.toFixed(3));
-  put(logo,"transform",`scale(${(.84+.16*lg).toFixed(3)}) translateY(${((1-lg)*14).toFixed(1)}px)`);
-  magic(P>.30 && P<.56);
-  bar.classList.toggle("on",P>.53);
-
-  /* paneles integrados en la escena */
-  let step=1;
-  PANELS.forEach((o,i)=>{
-    const v=ss(o.a,o.a+.035,P)*(1-ss(o.b-.035,o.b,P));
-    put(o.el,"opacity",v.toFixed(3));
-    put(o.el,"transform",`translate3d(0,${((1-v)*28).toFixed(1)}px,0)`);
-    put(o.el,"visibility",v<.005?"hidden":"visible");
-    o.el.classList.toggle("act",v>.55);
-    if(P>=o.a) step=i+1;
-  });
-  if(step!==lastStep){lastStep=step;setStep(step)}
-}
-
-/* decoración de los cuadros: ornamentos dorados, brillo, polvo de hadas */
-$$(".card").forEach(card=>{
-  if(card.classList.contains("lock")) { /* también lleva ornamentos */ }
-  ["tl","tr","bl","br"].forEach(c=>{const i=document.createElement("i");i.className="orn "+c;card.appendChild(i)});
-  const sh=document.createElement("span");sh.className="sheen";card.appendChild(sh);
-  const du=document.createElement("span");du.className="pdust";
-  for(let i=0;i<9;i++){const e=document.createElement("i");
-    e.style.cssText=`left:${6+Math.random()*88}%;top:${30+Math.random()*66}%;animation-delay:${-Math.random()*6}s;animation-duration:${4.5+Math.random()*4}s`;du.appendChild(e)}
-  card.appendChild(du);
-});
-$$(".panel").forEach(pn=>{
-  ["l","r"].forEach(side=>{const l=document.createElement("i");l.className="lantern "+side;pn.appendChild(l)});
-});
-
-function setStep(n){
-  $$(".path .p").forEach(p=>{const k=+p.dataset.p;p.classList.toggle("on",k===n);p.classList.toggle("done",k<n)});
-}
-
-/* ---------- hada con volumen real (WebGL) ---------- */
-const VERT="uniform sampler2D uDepth;uniform float uDisp;varying vec2 vUv;void main(){vUv=uv;float d=texture2D(uDepth,uv).r;vec3 p=position;p.z+=d*uDisp;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);}";
-const FRAG="uniform sampler2D uMap;uniform sampler2D uDepth;uniform vec2 uTexel;uniform float uTime;uniform vec3 uLight;varying vec2 vUv;"+
-"void main(){vec4 c=texture2D(uMap,vUv);if(c.a<0.02)discard;"+
-"float dl=texture2D(uDepth,vUv-vec2(uTexel.x,0.)).r;float dr=texture2D(uDepth,vUv+vec2(uTexel.x,0.)).r;float dd=texture2D(uDepth,vUv-vec2(0.,uTexel.y)).r;float du=texture2D(uDepth,vUv+vec2(0.,uTexel.y)).r;"+
-"vec3 n=normalize(vec3((dl-dr)*5.,(dd-du)*5.,1.));vec3 L=normalize(uLight);float l=dot(n,L)*.5+.5;"+
-"vec3 col=c.rgb*(.82+.4*l);float rim=pow(1.-n.z,2.2);col+=vec3(1.,.66,.85)*rim*.35;"+
-"float sp=pow(max(dot(reflect(-L,n),vec3(0.,0.,1.)),0.),22.);col+=vec3(1.)*sp*.14;"+
-"float sw=smoothstep(.0,.05,1.-abs(fract(vUv.x*.8+vUv.y*.35-uTime*.06)-.5)*2.);col+=vec3(1.,.88,.96)*sw*.05;"+
-"gl_FragColor=vec4(col,c.a);}";
-const fairyGL=(function(){
-  if(typeof THREE==="undefined"||!animate) return null;
-  const cv=$("#fairy-gl"); let r;
-  try{ r=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true}); }catch(e){ return null; }
-  r.setPixelRatio(Math.min(devicePixelRatio||1,1.75)); r.setClearColor(0x000000,0);
-  const scene=new THREE.Scene(), cam=new THREE.PerspectiveCamera(22,.43,.1,50); cam.position.z=7;
-  const mat=new THREE.ShaderMaterial({transparent:true,side:THREE.DoubleSide,depthWrite:false,vertexShader:VERT,fragmentShader:FRAG,
-    uniforms:{uMap:{value:null},uDepth:{value:null},uTexel:{value:new THREE.Vector2(1/256,1/256)},uTime:{value:0},uLight:{value:new THREE.Vector3(.4,.5,1)},uDisp:{value:.32}}});
-  const mesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1,56,120),mat); mesh.visible=false; scene.add(mesh);
-  const api={ready:false};
-  function depthFrom(img){
-    const w=256,h=Math.max(8,Math.round(256*img.naturalHeight/img.naturalWidth));
-    const c=document.createElement("canvas");c.width=w;c.height=h;const x=c.getContext("2d");x.drawImage(img,0,0,w,h);
-    const d=x.getImageData(0,0,w,h);for(let i=0;i<d.data.length;i+=4){const a=d.data[i+3];d.data[i]=d.data[i+1]=d.data[i+2]=a;d.data[i+3]=255}
-    x.putImageData(d,0,0);
-    const c2=document.createElement("canvas");c2.width=w;c2.height=h;const y=c2.getContext("2d");
-    y.filter="blur(7px)";y.drawImage(c,0,0);return c2;
-  }
-  api.load=function(src){
-    const im=new Image(); im.onload=()=>{
-      const ar=im.naturalWidth/im.naturalHeight;
-      const t=new THREE.Texture(im);t.needsUpdate=true;t.minFilter=THREE.LinearFilter;t.generateMipmaps=false;
-      const dc=depthFrom(im), dt=new THREE.CanvasTexture(dc);dt.minFilter=THREE.LinearFilter;dt.generateMipmaps=false;
-      mat.uniforms.uMap.value=t;mat.uniforms.uDepth.value=dt;mat.uniforms.uTexel.value.set(1/dc.width,1/dc.height);
-      const vh=2*7*Math.tan(THREE.MathUtils.degToRad(11))*.97;
-      mesh.scale.set(vh*ar,vh,1); cam.aspect=ar; cam.updateProjectionMatrix();
-      fairy.style.setProperty("--ar",ar.toFixed(4));
-      fairy.classList.add("gl"); api.ready=true; mesh.visible=true;
-      requestAnimationFrame(()=>{measure(); r.setSize(fairy.clientWidth,fairy.clientHeight,false);});
-    };
-    im.onerror=()=>{ if(src!=="assets/hada-cuerpo.webp") api.load("assets/hada-cuerpo.webp") };
-    im.src=src;
-  };
-  api.draw=function(t){
-    if(!api.ready||wob.enter<.01) return;
-    smx+=(mx-smx)*.08; smy+=(my-smy)*.08;
-    mesh.rotation.y=smx*.16;
-    mesh.rotation.x=-smy*.06;
-    mat.uniforms.uTime.value=t;
-    mat.uniforms.uLight.value.set(smx*.9+.25,-smy*.9+.4,1);
-    const w=Math.round(cv.clientWidth*r.getPixelRatio());
-    if(w&&cv.width!==w) r.setSize(cv.clientWidth,cv.clientHeight,false);
-    r.render(scene,cam);
-  };
-  return api;
-})();
-if(fairyGL){
-  /* primero busca el personaje 3D; si no está, usa su arte exacto */
-  const probe=new Image();
-  probe.onload=()=>fairyGL.load("assets/chari-3d.png");
-  probe.onerror=()=>fairyGL.load("assets/hada-cuerpo.webp");
-  probe.src="assets/chari-3d.png";
-}
-
-/* mapeo scroll ↔ progreso */
-let journeyRange=1;
-function recalc(){ journeyRange=Math.max(1,$("#journey").offsetHeight-innerHeight); }
-function scrollToP(P){
-  window.scrollTo({top:P*journeyRange,behavior:reduce?"auto":"smooth"});
-}
-if(animate){
-  recalc(); addEventListener("resize",recalc);
-  const prog={v:0};
-  gsap.registerPlugin(ScrollTrigger);
-  gsap.to(prog,{v:1,ease:"none",onUpdate:()=>render(prog.v),
-    scrollTrigger:{trigger:"#journey",start:"top top",end:"bottom bottom",scrub:.35}});
-  measure(); render(0);
-  gsap.ticker.add((t)=>{ if(fairyGL) fairyGL.draw(t); });
-} else {
-  curFrame=FRAMES-1; setTimeout(()=>{drawFrame(curFrame)},300);
-  plates[0].style.opacity=1; $("#hero-copy").style.opacity=1;
-  $("#cal-content").hidden=true; setStep(1);
-}
-window.__go=scrollToP;
-
-/* =========================================================
-   RESERVA
-   ========================================================= */
-const store={
-  get(){try{return JSON.parse(localStorage.getItem("chhari_turnos")||"[]")}catch(e){return []}},
-  add(t){try{const l=this.get();l.push(t);localStorage.setItem("chhari_turnos",JSON.stringify(l))}catch(e){}}
-};
-$("#servicios").innerHTML=CONFIG.servicios.map(s=>`
-  <label class="serv"><input type="radio" name="servicio" value="${s.id}"><span><div><strong>${s.nombre}</strong><small>${s.nota||""}</small></div></span></label>`).join("");
-
-function goStep(which){
-  const P={datos:.55,cal:.74,sena:.92}[which];
-  if(animate) scrollToP(P); else $("#p-"+(which==="datos"?"datos":which==="cal"?"cal":"sena")).scrollIntoView({behavior:"smooth"});
-}
-document.addEventListener("click",e=>{const b=e.target.closest("[data-goto]");if(b)goStep(b.dataset.goto)});
-
-function validTel(v){const d=v.replace(/\D/g,"");return d.length>=10&&d.length<=13}
-$("#form").addEventListener("submit",e=>{
-  e.preventDefault();
-  const nombre=$("#nombre").value.trim(), apellido=$("#apellido").value.trim(), tel=$("#tel").value.trim();
-  const mail=$("#mail").value.trim(), cumple=$("#cumple").value, consent=$("#consent").checked;
-  const sv=document.querySelector("input[name=servicio]:checked");
-  const okMail=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail);
-  const cd=cumple?new Date(cumple+"T00:00:00"):null;
-  const okCumple=!!cd&&!isNaN(cd)&&cd<=new Date()&&cd.getFullYear()>=1930;
-  $("#f-nombre").classList.toggle("err",nombre.length<2);
-  $("#f-apellido").classList.toggle("err",apellido.length<2);
-  $("#f-servicio").classList.toggle("err",!sv);
-  $("#f-tel").classList.toggle("err",!validTel(tel));
-  $("#f-mail").classList.toggle("err",!okMail);
-  $("#f-cumple").classList.toggle("err",!okCumple);
-  if(nombre.length<2||apellido.length<2||!sv||!validTel(tel)||!okMail||!okCumple) return;
-  Object.assign(state,{nombre,apellido,tel,mail,cumple,consent,servicio:CONFIG.servicios.find(s=>s.id===sv.value)});
-  state.fecha=null;state.hora=null;state.sena=false;
-  const hoy=new Date(); state.mes=new Date(hoy.getFullYear(),hoy.getMonth(),1);
-  $("#lock-cal").hidden=true; $("#cal-content").hidden=false;
-  renderCal(); goStep("cal");
-});
-
-function aMin(h){ const [a,b]=h.split(":").map(Number); return a*60+b; }
-function bloques(d){
-  const k=key(d), c=CONFIG.ocupados[k];
-  if(c==="todo") return "todo";
-  const def=CONFIG.bloqueDefault||120;
-  const manual=(c||[]).map(x=>typeof x==="string"?{ini:aMin(x),fin:aMin(x)+def}:{ini:aMin(x.h),fin:aMin(x.h)+(x.min||def)});
-  const mios=store.get().filter(t=>t.fecha===k).map(t=>({ini:aMin(t.hora),fin:aMin(t.hora)+(t.min||def)}));
-  return manual.concat(mios);
-}
-function libres(d){
-  const base=CONFIG.horarios[d.getDay()]||[];
-  const bl=bloques(d); if(bl==="todo") return [];
-  const dur=(state.servicio&&state.servicio.min)||60;
-  const cierre=aMin(CONFIG.cierre[d.getDay()]||"20:00");
-  const minT=Date.now()+CONFIG.anticipacionHoras*3600e3;
-  return base.filter(h=>{
-    const ini=aMin(h), fin=ini+dur;
-    if(fin>cierre) return false;
-    if(bl.some(b=>ini<b.fin&&fin>b.ini)) return false;
-    const [hh,mm]=h.split(":").map(Number);
-    return new Date(d.getFullYear(),d.getMonth(),d.getDate(),hh,mm).getTime()>=minT;
-  });
-}
-function renderCal(){
-  const m=state.mes, hoy=new Date(); hoy.setHours(0,0,0,0);
-  const primero=new Date(m.getFullYear(),m.getMonth(),1);
-  const ultimo=new Date(m.getFullYear(),m.getMonth()+1,0).getDate();
-  $("#mes").textContent=primero.toLocaleDateString("es-AR",{month:"long",year:"numeric"});
-  const offset=(primero.getDay()+6)%7;
-  let h="";
-  for(let i=0;i<offset;i++) h+=`<span class="day blank"></span>`;
-  for(let n=1;n<=ultimo;n++){
-    const d=new Date(m.getFullYear(),m.getMonth(),n);
-    const l=d<hoy?[]:libres(d), k=key(d), sel=state.fecha===k;
-    const cls=["day"]; if(l.length) cls.push("libre"); if(sel) cls.push("sel"); if(d.getTime()===hoy.getTime()) cls.push("hoy");
-    h+=`<button class="${cls.join(" ")}" data-k="${k}" ${l.length?"":"disabled"} aria-label="${d.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long"})}${l.length?`, ${l.length} horarios`:", sin lugar"}" aria-pressed="${sel}">${n}</button>`;
-  }
-  $("#days").innerHTML=h;
-  const hm=new Date(), lim=new Date(hm.getFullYear(),hm.getMonth()+CONFIG.mesesAdelante,1);
-  $("#prev").disabled=m.getFullYear()===hm.getFullYear()&&m.getMonth()===hm.getMonth();
-  $("#next").disabled=m.getTime()>=lim.getTime();
-  renderSide();
-}
-function fechaLarga(k){
-  const [y,m,d]=k.split("-").map(Number);
-  return new Date(y,m-1,d).toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long"});
-}
-function renderSide(){
-  $("#mini").innerHTML=`<strong>${nombreCompleto().replace(/[<>&]/g,"")}</strong> · ${state.servicio.nombre}`;
-  const slots=$("#slots");
-  if(!state.fecha) slots.innerHTML=`<p class="empty">Los horarios aparecen acá ✦</p>`;
-  else{
-    const [y,m,d]=state.fecha.split("-").map(Number);
-    const l=libres(new Date(y,m-1,d));
-    slots.innerHTML=l.length
-      ?l.map(h=>`<button class="slot ${state.hora===h?"sel":""}" data-h="${h}">${h}</button>`).join("")
-      :`<p class="empty">Ese día se llenó. Probá con otro.</p>`;
-  }
-  $("#to3").disabled=!(state.fecha&&state.hora);
-  lastSay=""; if(!animate) return; render(currentP());
-}
-function currentP(){ return clamp(scrollY/journeyRange); }
-$("#days").addEventListener("click",e=>{
-  const b=e.target.closest(".day.libre"); if(!b) return;
-  state.fecha=b.dataset.k; state.hora=null; renderCal();
-});
-$("#slots").addEventListener("click",e=>{
-  const b=e.target.closest(".slot"); if(!b) return;
-  state.hora=b.dataset.h; renderSide();
-});
-$("#prev").onclick=()=>{state.mes=new Date(state.mes.getFullYear(),state.mes.getMonth()-1,1);renderCal()};
-$("#next").onclick=()=>{state.mes=new Date(state.mes.getFullYear(),state.mes.getMonth()+1,1);renderCal()};
-$("#back1").onclick=()=>goStep("datos");
-
-function durTxt(m){ return `${Math.floor(m/60)}:${String(m%60).padStart(2,"0")} hs`; }
-function nombreCompleto(){ return (state.nombre+" "+state.apellido).trim(); }
-function waNumber(t){
-  let d=String(t).replace(/\D/g,"");
-  if(d.startsWith("00")) d=d.slice(2);
-  if(d.startsWith("0")) d=d.slice(1);
-  if(d.startsWith("54")) return d.startsWith("549")?d:"549"+d.slice(2);
-  return "549"+d.replace(/^15/,"");
-}
-function horaCorta(h){ const [a,b]=h.split(":"); return b==="00"?`${+a}hs`:`${+a}:${b}hs`; }
-function diaCorto(k){
-  const [y,m,d]=k.split("-").map(Number);
-  const w=new Date(y,m-1,d).toLocaleDateString("es-AR",{weekday:"long"});
-  return `${w} ${d}/${m}`;
-}
-/* mensaje que Chari envía al confirmar (texto original, solo cambian día y hora) */
-function mensajeConfirmacion(){
-  const sa=CONFIG.salon;
-  return [
-    "Hola Chulita 🫰🏼 espero que estés teniendo un lindo día!!! ",
-    "Me comunico para recordarte tu turno para MANICURA💅🏻💅🏻💅🏻",
-    "",
-    `${diaCorto(state.fecha)} a las ${horaCorta(state.hora)}`,
-    "",
-    "TE ESPERO EN ",
-    "",
-    `📍${sa.direccion} `,
-    `Barrio: ${sa.barrio} `,
-    "",
-    "RECORDAR: 👇🏼",
-    "",
-    ...CONFIG.reglas.map(r=>"•"+r),
-    "",
-    "Recibo Efectivo y transferencias. ",
-    "Para pagos con Tranferencia: ",
-    `ALIAS: ${CONFIG.pago.alias} `,
-    `TITULAR: ${CONFIG.pago.titular} `,
-    "",
-    "LOS PAGOS SE REALIZAN ANTES DE RETIRARSE DEL SALÓN",
-    "",
-    "POR FAVOR ENVIAR COMPROBANTE. ",
-    "",
-    "🫂 GRACIAS TE ESPERO 🫰🏼 ",
-    "",
-    sa.instagram
-  ].join("\n");
-}
-function pintarRecordatorios(){
-  const sa=CONFIG.salon, esc=t=>t.replace(/[<>&]/g,"");
-  const mail=CONFIG.endpoint?`<p class="pagos">📧 Te enviamos un mail a <strong>${esc(state.mail)}</strong> con todo el detalle: servicios, extras y requisitos.</p>`:"";
-  $("#reglas").innerHTML=`
-    <h4>Reserva, confirmación y cancelaciones</h4>
-    <ul>${CONFIG.reserva.map(r=>`<li>${esc(r)}</li>`).join("")}</ul>
-    <h4 style="margin-top:12px">A tener en cuenta</h4>
-    <ul>${CONFIG.tenerEnCuenta.map(r=>`<li>${esc(r)}</li>`).join("")}</ul>
-    <h4 style="margin-top:12px">Antes de venir</h4>
-    <p class="donde">📍 <strong>${sa.direccion}</strong> · Barrio ${sa.barrio} · <a href="${sa.mapa}" target="_blank" rel="noopener">Cómo llegar</a></p>
-    <ul>${CONFIG.reglas.map(r=>`<li>${esc(r)}</li>`).join("")}</ul>
-    <p class="pagos">Recibo efectivo y transferencias. Los pagos se realizan antes de retirarse del salón. Por favor enviar comprobante.</p>${mail}`;
-}
-/* calendario del celular (.ics) y Google Calendar */
-const tc=t=>t.toLowerCase().replace(/(^|\s)\S/g,c=>c.toUpperCase());
-function eventoCal(){
-  const [y,m,d]=state.fecha.split("-").map(Number), [hh,mm]=state.hora.split(":").map(Number);
-  const ini=new Date(Date.UTC(y,m-1,d,hh+3,mm));           // Argentina: UTC-3 sin horario de verano
-  const fin=new Date(ini.getTime()+((state.servicio&&state.servicio.min)||CONFIG.duracionMin)*60000);
-  const f=t=>t.toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
-  const sa=CONFIG.salon;
-  return {
-    ini:f(ini), fin:f(fin),
-    titulo:"💅 Manicura · Chhari Chhula",
-    lugar:`${tc(sa.direccion)}, ${tc(sa.barrio)}, Córdoba`,
-    desc:`${state.servicio.nombre}. El turno se confirma al acreditarse la seña de ${pesos(CONFIG.sena)} (alias ${CONFIG.pago.alias}, titular ${CONFIG.pago.titular}). Puntualidad: tolerancia 15 min. Instagram ${sa.instagram}`
-  };
-}
-function descargarICS(){
-  const e=eventoCal();
-  const esc=t=>t.replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\n/g,"\\n");
-  const ics=[
-    "BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Chhari Chhula//Reservas//ES","CALSCALE:GREGORIAN","METHOD:PUBLISH",
-    "BEGIN:VEVENT",
-    `UID:turno-${e.ini}-${waNumber(state.tel)}@chharichhula`,
-    `DTSTAMP:${new Date().toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"")}`,
-    `DTSTART:${e.ini}`,`DTEND:${e.fin}`,
-    `SUMMARY:${esc(e.titulo)}`,`LOCATION:${esc(e.lugar)}`,`DESCRIPTION:${esc(e.desc)}`,
-    "BEGIN:VALARM","TRIGGER:-P1D","ACTION:DISPLAY","DESCRIPTION:Mañana es tu turno con Chari","END:VALARM",
-    "BEGIN:VALARM","TRIGGER:-PT2H","ACTION:DISPLAY","DESCRIPTION:En 2 horas es tu turno con Chari","END:VALARM",
-    "END:VEVENT","END:VCALENDAR"
-  ].join("\r\n");
-  const blob=new Blob([ics],{type:"text/calendar;charset=utf-8"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob); a.download="turno-chhari-chhula.ics";
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-  toast("Listo: abrilo para sumarlo a tu calendario ✦");
-}
-function linkGoogleCal(){
-  const e=eventoCal();
-  return "https://calendar.google.com/calendar/render?action=TEMPLATE"
-    +"&text="+encodeURIComponent(e.titulo)+"&dates="+e.ini+"/"+e.fin
-    +"&details="+encodeURIComponent(e.desc)+"&location="+encodeURIComponent(e.lugar)
-    +"&ctz=America/Argentina/Cordoba";
-}
-/* base de clientas: local + (opcional) planilla de Chari */
-const clientas={
-  get(){try{return JSON.parse(localStorage.getItem("chhari_clientas")||"{}")}catch(e){return {}}},
-  save(rec){
-    try{
-      const all=this.get(), k=waNumber(rec.tel), prev=all[k]||{turnos:[]};
-      all[k]=Object.assign({},prev,{nombre:rec.nombre,apellido:rec.apellido,tel:rec.tel,mail:rec.mail,cumple:rec.cumple,consent:rec.consent,
-        turnos:prev.turnos.concat([{fecha:rec.fecha,hora:rec.hora,servicio:rec.servicio,creado:rec.creado}])});
-      localStorage.setItem("chhari_clientas",JSON.stringify(all));
-    }catch(e){}
-  }
-};
-function enviarAPlanilla(rec){
-  if(!CONFIG.endpoint) return;
-  try{
-    fetch(CONFIG.endpoint,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(rec)}).catch(()=>{});
-  }catch(e){}
-}
-
-function waLink(){
-  const cumple=state.cumple.split("-").reverse().join("/");
-  const txt=[
-    "¡Hola Chari! 🧚🏻‍♀️💖",
-    `Soy ${nombreCompleto()} y quiero confirmar mi turno de manicura 💅🏻✨`,
-    "",
-    `🌸 Servicio: *${state.servicio.nombre}*`,
-    `📅 Día: *${diaCorto(state.fecha)} a las ${horaCorta(state.hora)}*`,
-    `💸 Seña: ${pesos(CONFIG.sena)} ✔️ (te mando el comprobante 🧾)`,
-    "",
-    `📲 Mi WhatsApp: ${state.tel}`,
-    `💌 Mi mail: ${state.mail}`,
-    `🎂 Mi cumple: ${cumple}`,
-    "",
-    "📸 Te paso por acá una foto de mis uñas y del diseño que quiero 💕",
-    "",
-    "¡Gracias, Chari! Nos vemos en el bosque 🌿🍄🫰🏼✨"
-  ].join("\n");
-  return `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(txt)}`;
-}
-$("#to3").onclick=()=>{
-  if(!(state.fecha&&state.hora)) return;
-  store.add({fecha:state.fecha,hora:state.hora,min:state.servicio.min,nombre:state.nombre,servicio:state.servicio.id,creado:Date.now()});
-  const rec={nombre:state.nombre,apellido:state.apellido,tel:state.tel,telWa:waNumber(state.tel),mail:state.mail,cumple:state.cumple,consent:state.consent,
-    servicio:state.servicio.nombre,valor:state.servicio.valor,duracionMin:state.servicio.min,fecha:state.fecha,hora:state.hora,sena:CONFIG.sena,creado:new Date().toISOString(),
-    mensajeConfirmacion:mensajeConfirmacion()};
-  clientas.save(rec); enviarAPlanilla(rec);
-  pintarRecordatorios();
-  $("#gcal").href=linkGoogleCal();
-  $("#ticket").innerHTML=`
-    <div><dt>Nombre</dt><dd>${nombreCompleto().replace(/[<>&]/g,"")}</dd></div>
-    <div><dt>Servicio</dt><dd>${state.servicio.nombre}</dd></div>
-    <div><dt>Día</dt><dd>${fechaLarga(state.fecha)}</dd></div>
-    <div><dt>Hora</dt><dd>${state.hora} hs</dd></div>
-    <div><dt>Duración</dt><dd>${durTxt(state.servicio.min)}</dd></div>
-    <div><dt>Valor del servicio</dt><dd>${state.servicio.valor}</dd></div>
-    <div class="total"><dt>Seña</dt><dd>${pesos(CONFIG.sena)}</dd></div>`;
-  $("#sena").textContent=pesos(CONFIG.sena);
-  $("#alias").textContent=CONFIG.pago.alias;
-  $("#titular").textContent="Titular: "+CONFIG.pago.titular;
-  $("#wa").href=waLink();
-  const pl=$("#pagolink"); if(CONFIG.pago.link){pl.href=CONFIG.pago.link;pl.hidden=false}
-  state.sena=true;
-  $("#lock-sena").hidden=true; $("#sena-content").hidden=false;
-  goStep("sena");
-};
-$("#copy").onclick=async()=>{
-  try{await navigator.clipboard.writeText(CONFIG.pago.alias);toast("Alias copiado ✦")}catch(e){toast("Seleccioná el alias y copialo")}
-};
-$("#otro").onclick=()=>{state.fecha=null;state.hora=null;state.sena=false;renderCal();goStep("cal")};
-function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("on");setTimeout(()=>e.classList.remove("on"),2000)}
-</script>
-</body>
-</html>
+<div class="booking-panel" id="step-manage" hidden>
+<h3 tabindex="-1" id="manage-title">Tu cita</h3>
+<div id="manage-body" aria-live="polite"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<aside class="motion-controls" aria-label="Movimiento del recorrido">
+<div class="mode-buttons" role="group" aria-label="Modo de movimiento"><button type="button" id="depth-mode" aria-pressed="true">Profundidad</button><button type="button" id="lite-mode" aria-pressed="false">Liviano</button></div>
+<button class="journey-replay" id="restart" type="button" aria-label="Volver al inicio del bosque"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg></button><input id="position" type="hidden" value="0"><p id="mode-note" hidden></p>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<noscript><style>.journey{height:100svh}.stage{position:relative}.scene-video,#start-still,#open-still,#exterior-still,.welcome{display:none}.arrival{visibility:visible;opacity:1}.noscript-note{display:block!important}</style><p class="noscript-note" style="display:none;position:relative;z-index:10;margin:90px 6vw;padding:16px;background:#fff5fa;color:#4d2337;border-radius:12px">Para reservar online necesitás activar JavaScript. También podés escribirle a Chhari por WhatsApp: <a href="https://wa.me/5493517593713">3517593713</a>.</p></noscript>
+</body></html>
