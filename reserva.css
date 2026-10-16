@@ -51,3 +51,11 @@ body.mant-lock{overflow:hidden}
 /* En la zona de reserva los controles de movimiento pasan al final de la página: nunca tapan campos ni botones. */
 .booking-in-view .motion-controls{position:static;justify-content:center;padding:6px 5vw 34px;background:#2b132a;opacity:1}
 .booking-in-view .journey-replay{display:none}
+
+/* Los textos del recorrido nunca se montan sobre los controles de movimiento (abajo a la izquierda). */
+.scroll-note{left:auto;right:5vw;bottom:34px;text-align:right;max-width:46vw}
+.media-status{bottom:70px;left:auto;right:5vw}
+@media(max-width:700px){
+  .scroll-note{left:22px;right:auto;text-align:left;bottom:80px;max-width:calc(100vw - 44px)}
+  .media-status{left:22px;right:22px;bottom:104px}
+}
